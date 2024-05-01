@@ -79,6 +79,31 @@
         font-size: 24px;
         color: #333;
     }
+    .container-heading {
+        text-align: center;
+        margin: 20px;
+      }
+      .container-heading::after {
+        content: "";
+          display: inline-block;
+          width: 10%;
+          height: 2px;
+          background-color: #ff6200;
+          position: relative;
+          left: 10px;      
+          bottom: 5px; 
+      }
+      
+      .container-heading::before {
+        content: "";
+          display: inline-block;
+          width: 10%;
+          height: 2px;
+          background-color: #ff6200;
+          position: relative;
+          right: 10px;
+          bottom: 5px;
+      }
 
     .course p {
         margin: 5px 0;

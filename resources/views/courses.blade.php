@@ -4,8 +4,7 @@
 
 <link rel="stylesheet" href="css/Cards-courses.css">
 <div class="container">
-     <h1>All Courses</h1>
-     <!-- Button to trigger modal -->
+  <h2 class="container-heading">All Courses</h2>   
 <button id="openModalButton" type="button" class="btn btn-primary">Add Course</button>
 
 <!-- Modal -->
