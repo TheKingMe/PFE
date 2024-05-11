@@ -51,9 +51,16 @@ $FormField = $request->validate([
 ]);
 if(auth()->attempt($FormField)){
     $request->session()->regenerate();
-    return redirect('/accueil')->with('message','you are logged in');
+    return redirect()->route('welcome')->with('message','you are logged in');
 
 }
 return back();
+}
+public function logout(Request $Request){
+auth()->logout();
+$request = session()->invalidate();
+$request = session()->regenrateToken();
+return redirect()->route('accueil')->with('message','you have been logged out');
+ 
 }
 }

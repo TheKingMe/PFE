@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Course extends Model
 {
     use HasFactory;
    
-    public function courseContents()
+    protected $fillable = ['name', 'description','tags'];
+    public function users()
     {
-        return $this->hasMany(CourseContent::class);
+        return $this->belongsToMany(User::class);
     }
 }
 

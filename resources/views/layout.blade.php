@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/Style.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/Scroll-cards.css">
+<link rel="stylesheet" href="{{ asset('css/framework.css') }}">
+<link rel="stylesheet" href="{{asset('css/all.min.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"></script> 
@@ -20,9 +22,9 @@
         }
     </style>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="margin:0;">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">KA3KA3</a>
+          <a class="navbar-brand" href="accueil">KA3KA3</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -45,10 +47,10 @@
               </li>
               
               <li>
-              <button type="button" class="btn btn-primary " style="margin-left:10px;">signup</button>
+              <button  type="button" class="btn btn-primary " style="margin-left:10px;"><a class="dropdown-item" href="{{route('registre.create')}}">Sign Up</a></button>
             </li>
             <li>
-              <button type="button" class="btn btn-primary ml-3" style="margin-left:10px;">login</button>
+              <button type="button" class="btn btn-primary ml-3" style="margin-left:10px;"><a class="dropdown-item" href="{{route('login')}}">Login</a></button>
             </li>
             </ul>
             <form class="d-flex" role="search">
@@ -61,7 +63,7 @@
 
 @yield('content')
 
-
+<link rel="stylesheet" href="css/footer.css" >
 <footer class="footer_area section_padding_130_0">
       <div class="container">
         <div class="row">

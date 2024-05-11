@@ -3,7 +3,11 @@
 
 @section('content')
 
-<h2>
+<h1>
     {{$course['name']}}
-</h2>
+</h1>
+<p>{{$course['description']}}</p>
+created by : {{$course['teacher']}}
+<h2>Course Content </h2>
+
 @endsection
