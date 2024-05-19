@@ -130,6 +130,26 @@ public function enroll(Request $request)
     // Redirect the user back to the course page or any other appropriate page
     return redirect()->route('courses.show', ['id' => $courseId])->with('success', 'Enrolled successfully!');
 }
+public function search(Request $request)
+{
+    $query = $request->input('search');
+   
+    $courses = Course::where('name', 'like', "%$query%")->get();
+    
+    return view('search-results', compact('courses'));//wa9ila sf db khas  ghi nrj3oha b7alha b7al dik page d courses
+    //z3n
+}
+public function tag($tag)
+{
+    // Retrieve courses that have the specified tag
+    $courses = Course::where('tags', 'like', "%$tag%")->get();
+    
+    // Pass the courses to the view
+    return view('courses.tag', compact('courses'));
+}
+//ach tadir daba chno baghi tgad waaa ka3ka3aaaaaaaaaaaaaaaaaah
+
+//mzl matzad liygol liya skat
 
 }
     

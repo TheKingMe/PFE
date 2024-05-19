@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\section;
+use App\Models\course;
+use App\Models\SectionContents;
+class coursepagecontroller extends Controller
+{
+   public function index(){
+    $sections = section::all();
+   
+    return view(('courses/{id}'),compact('sections'));
+   }
+   public function delete($id){
+      $course = course::findOrFail($id);  
+      $course->delete(); // Delete the course
+
+      return redirect()->route('adminstration')->with('message', 'Course deleted successfully');
+   }
+   public function approve($id)
+   {
+       $course = Course::findOrFail($id);
+       $course->approved = true;
+       $course->save();
+
+       return redirect()->route('adminstration')->with('message', 'Course approved successfully');
+   }
+}

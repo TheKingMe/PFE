@@ -1,7 +1,6 @@
 @extends('layout')
 @section('content')
 
-
 <link rel="stylesheet" href="css/Cards-courses.css">
 <div class="container">
   <h2 class="container-heading">All Courses</h2>   
@@ -58,11 +57,11 @@
                     $tags=explode(',', $course->tags);
                     @endphp
 
-            <a href="/courses/{{$course['id']}}1`` 12" class="card-item">
+            <a href="/courses/{{$course['id']}}" class="card-item">
                 <img src="images/bg-img.jpg" alt="Card Image">
                 <h4>{{$course->teacher}}</h4>
                 @foreach ($tags as $tag)
-                <span class="developer">{{ $tag }}</span>
+              <span class="developer">{{ $tag }}</span>
                 @endforeach
                 <div class="products_star">
                     @for ($i = 0; $i < $course->rating; $i++)

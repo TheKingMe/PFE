@@ -45,16 +45,25 @@
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
               </li>
-              
+              @auth
+              <li>
+              <form method="post" action="{{route('logout')}}"> 
+                @csrf
+               <button type="submit" class="btn btn-primary " style="margin-left:10px;">logout</button> 
+              </form>
+            </li>
+            @else
               <li>
               <button  type="button" class="btn btn-primary " style="margin-left:10px;"><a class="dropdown-item" href="{{route('registre.create')}}">Sign Up</a></button>
             </li>
             <li>
               <button type="button" class="btn btn-primary ml-3" style="margin-left:10px;"><a class="dropdown-item" href="{{route('login')}}">Login</a></button>
             </li>
+           @endforelse
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" role="search" method="post" action="{{ route('courses.search') }}">
+            @csrf
+              <input class="form-control me-2" name="search" type="text" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
           </div>

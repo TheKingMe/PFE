@@ -14,10 +14,14 @@ class SectionController extends Controller
        
        
         public function create($course_id) {
+            $sectioncontents = SectionContents::all();
             $sections = Section::all(); // Retrieve sections from the database or wherever they come from
-            return view('add')->with('section', $sections)->with('course_id', $course_id);
+            $videoContent = SectionContents::find($course_id);
+
+              
+         
+            return view('add')->with('section', $sections)->with('course_id', $course_id)->with('sectionContents', $sectioncontents);
         }
-        
 
     public function store(Request $request){
         // Validate the incoming request data

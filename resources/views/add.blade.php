@@ -1,3 +1,4 @@
+
 @extends('layout')
 @section('content')
 
@@ -672,7 +673,22 @@ button[type="submit"]:hover {
     background-color: #0056b3; /* Button background color on hover */
 }
 
+#videoContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Adjust this if necessary to make the video appear above other content */
+}
+
+#videoPlayer {
+  width: 800px; /* Adjust width as desired */
+  height: 500px; /* Adjust height as desired */
+}
+
+
 </style>
+
 <section class="container" style="height: 93vh">
 
 {{-- <select id="myselect" class="form-select form-select-sm" aria-label="Default select example">
@@ -774,6 +790,7 @@ button[type="submit"]:hover {
     </div>
 </div>
 
+
     <div class="container mx-auto p-6 ">
 
         <table id="dataTable" class="w-full whitespace-no-wrap bg-white dark:bg-gray-800 overflow-hidden table-striped">
@@ -781,7 +798,7 @@ button[type="submit"]:hover {
             <tr>
               <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="name">Name</th>
               <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="content">Content</th>
-              <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="status">Status</th>
+              {{-- <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="status">Status</th> --}}
               <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs">Actions</th>
             </tr>
           </thead>
@@ -789,13 +806,38 @@ button[type="submit"]:hover {
             
              
              </script>
-          @foreach ($section as $sections)
+      @foreach ($section as $sections)
           
           @if($sections->course_id==$course_id)
           <tr>
           <td><a>{{$sections->name}}</a></td>
-          <td>pending</td>
-          <td>chi7aja</td>
+         
+                
+          <td>
+             @foreach ($sectionContents as $Sc)
+              @if ($Sc->section_id == $sections->id)
+              <a href="#" id="showVideoLink" class="video-link">{{ $Sc->file_name }}</a><br>
+              <?php              
+              
+              $f_p = null; // Initialize with null to avoid potential errors
+
+              $files = glob('storage/' . $Sc->file_path . '/*');
+
+if (count($files) === 1) {
+  $f_p = $files[0];
+}
+?>
+<div id="videoContainer" style="display: none;" >
+<video id="videoPlayer" width="200" height="200" controls autoplay>
+  <source src="{{ asset($f_p) }}" type="video/mp4">
+</video>
+ </div>
+              @endif
+
+        @endforeach
+          </td>
+                        
+
           <td>
             {{--<a href="#" class="button-edit">Edit</a>
              <a href="#" class="button-update">Update</a>
@@ -838,12 +880,10 @@ button[type="submit"]:hover {
           </tbody>
         </table>
       </div>
+     
 
-      <!-- Your Blade template -->
-
-
-
-
+      
+  </div>
     
       {{-- <select class="form-select" aria-label="Default select example">
         <option selected disabled>Add content</option> 
@@ -866,6 +906,49 @@ button[type="submit"]:hover {
 }
 
 </script>
+<script>
+document.getElementById('showVideoLink').addEventListener('click', function() {
+  var videoContainer = document.getElementById('videoContainer');
+  if (videoContainer.style.display === 'none') {
+    videoContainer.style.display = 'block';
+  } else {
+    videoContainer.style.display = 'none';
+  }
+});
+
+
+window.addEventListener('click', function(event) {
+  var videoContainer = document.getElementById('videoContainer');
+  var showVideoLink = document.getElementById('showVideoLink');
+  if (event.target !== videoContainer && event.target !== showVideoLink) {
+    videoContainer.style.display = 'none';
+  }
+});
+</script>
+
+<script>
+    // const videoLinks = document.querySelectorAll('.video-link');
+
+    // // Add click event listeners to each video link
+    // videoLinks.forEach(function(videoLink) {
+    //     videoLink.addEventListener('click', function(event) {
+    //         event.preventDefault(); // Prevent default link behavior
+
+    //         // Get the video path from the data attribute
+    //         const videoPath = videoLink.getAttribute('data-video-path');
+
+    //         // Get the video player element
+    //         const videoPlayer = document.getElementById('videoPlayer');
+
+    //         // Set the source of the video player to the clicked video path
+    //         videoPlayer.src = videoPath;
+
+    //         // Show the video container
+    //         document.getElementById('videoContainer').style.display = 'block';
+    //     });
+    // });
+</script>
+
 <script>
   function toggleFileUpload() {
       var vedio_pdf = document.getElementById("vedio_pdf").value;
@@ -941,39 +1024,39 @@ window.onclick = function(event) {
 
 
 
-function createNewSection(title) {
+// function createNewSection(title) {
    
-    var newRow = document.createElement("tr"); // Create a new table row
-    newRow.innerHTML = `
-          <td><a>${title}</a></td>
-          <td>pending</td>
-          <td>chi7aja</>
-          <td>
-            {{--<a href="#" class="button-edit">Edit</a>
-             <a href="#" class="button-update">Update</a>
-             <a href="#" class="button-delete">Delete</a>--}}
-             <input type="button" id="editSectionNam" class="button-update" style="margin-right: 10px" value="Add Section">
-             <a href=""><i class="fa fa-trash-o fa-lg"></i></a>
-          </td>
-    `;
+//     var newRow = document.createElement("tr"); // Create a new table row
+//     newRow.innerHTML = `
+//           <td><a>${title}</a></td>
+//           <td>pending</td>
+//           <td>chi7aja</>
+//           <td>
+//             {{--<a href="#" class="button-edit">Edit</a>
+//              <a href="#" class="button-update">Update</a>
+//              <a href="#" class="button-delete">Delete</a>--}}
+//              <input type="button" id="editSectionNam" class="button-update" style="margin-right: 10px" value="Add Section">
+//              <a href=""><i class="fa fa-trash-o fa-lg"></i></a>
+//           </td>
+//     `;
   
-            sectionsContainer.appendChild(newRow);
+//             sectionsContainer.appendChild(newRow);
 
-            document.addEventListener("DOMContentLoaded", function() {
-      var editSectionNam = document.getElementById("editSectionNam");
-      var modal2 = document.getElementById("modal2");
+//             document.addEventListener("DOMContentLoaded", function() {
+//       var editSectionNam = document.getElementById("editSectionNam");
+//       var modal2 = document.getElementById("modal2");
   
-      if (editSectionNam && modal2) {
-          editSectionNam.addEventListener('click', function(){
-              modal2.style.display = "block"; // Display the modal when "Edit" button is clicked
-          });
-      } else {
-          console.error("editSectionNam or modal2 element not found.");
-      }
-  });
+//       if (editSectionNam && modal2) {
+//           editSectionNam.addEventListener('click', function(){
+//               modal2.style.display = "block"; // Display the modal when "Edit" button is clicked
+//           });
+//       } else {
+//           console.error("editSectionNam or modal2 element not found.");
+//       }
+//   });
 
-    // No need for the event listener for select and click event on the row
-}
+//     // No need for the event listener for select and click event on the row
+// }
 // function openEditModal2(title) {
 //     // Here you can populate the modal with section details for editing
 //     document.getElementById('editSectionName').value = title;

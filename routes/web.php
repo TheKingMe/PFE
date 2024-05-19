@@ -9,15 +9,21 @@ use App\Http\Controllers\SectionContentController;
 use App\http\Controllers\welcomeController;
 use App\Http\Controllers\AccueilController;
 use App\Http\Controllers\admincontroller;
+use App\Http\Controllers\coursepagecontroller;
+use App\Models\section;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\SectionContents;
 
 
-Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');
-
-
+Route::get('/accueil', [AccueilController::class, 'index'])->middleware('verified')->name('accueil');
+Route::post('/courses/search',[CourseController::class , 'search'])->name('courses.search');
+Route::post('/logout',[UserController::class,'logout'])->name('logout');
 Route::get('/courses/add/{course_id}', [SectionController::class, 'create'])->name('Add.create');
-
+Route::get('/courses/tag/{tag}', [CourseController::class,'tags'])->name('courses.tag');
 Route::post('/courses/add',[sectionController::class,'store'])->name('Add.store');
 Route::post('/courses/add/{course_id}',[SectionContentController::class,'store'])->name('content.store');
+// Route::get('/courses/add/{course_id}',[SectionContentController::class,'index'])->name('content.index');
 Route::delete('/courses/add/{id}', 'App\Http\Controllers\SectionController@delete')->name('section.delete');
 Route::get('/welcome', [welcomeController::class, 'index'])->name('welcome');
 
@@ -40,18 +46,34 @@ Route::get('/registre', [UserController::class, 'create'])->name('registre.creat
 Route::post('/register', [UserController::class, 'store'])->name('register.store');
 
 Route::get('/courses', [CourseController::class, 'index'])->name('Courses.index');
+//Route::get('/courses/{id}',[coursepagecontroller::class, 'index'])->name('courseId.index');
+    
 Route::get('/courses/{id}', function ($id) {
-    return view('course', [
-        'course' => Course::findOrFail($id),
-    ]);
+    $course = Course::findOrFail($id);
+    $sections = Section::all();
+    $contents = SectionContents::all();
+
+    return view('course', compact('course', 'sections', 'contents'));
 })->name('courses.show');
-Route::get('/courses/{id}', function ($id) {
-    return view('course', [
-        'course' => Course::findOrFail($id),
-    ]);
-})->name('courses.show');
+
 Route::get('/adminstration',[admincontroller::class,'index'])->name('adminstration');
 
+Route::get('courses/add/{id}', function ($id) {
+    $videoContent = SectionContents::find($id);
+    
+    if ($videoContent) {
+        $videoPath = asset('storage/' . $videoContent->file_path); // Construct path
+        return view('video.show', ['videoPath' => $videoPath]); // Pass path to view
+    } else {
+        // Handle video not found scenario
+    }
+})->name('video.show');
 
 //Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
     Route::post('/courses/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
+Route::delete('/course/{id}',[coursepagecontroller::class,'delete'])->name('course.delete');
+Route::post('course/{id}',[coursepagecontroller::class,'approve'])->name('course.approve');
+// Auth::routes([
+//     'verify'=>true
+// ]);
+//lay3az chatGBT

@@ -24,6 +24,7 @@ class UserController extends Controller
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => ['required', 'confirmed', 'min:6'],
             'role' => ['required'],
+
         ]);
 
         // Hash the password before storing it
@@ -59,7 +60,7 @@ return back();
 public function logout(Request $Request){
 auth()->logout();
 $request = session()->invalidate();
-$request = session()->regenrateToken();
+$request = session()->regenerateToken();
 return redirect()->route('accueil')->with('message','you have been logged out');
  
 }

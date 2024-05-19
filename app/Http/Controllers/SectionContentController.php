@@ -6,12 +6,14 @@ use App\Models\SectionContents;
 use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; // Add this namespace
+use Illuminate\Support\Facades\Storage;
 
 
 class SectionContentController extends Controller
 {
 
 
+    
     public function edit(int $course_id)
     {
         $section = Section::where('course_id', $course_id)->firstOrFail(); // Example query
@@ -20,53 +22,40 @@ class SectionContentController extends Controller
         return view('add')->with('section_id', $section_id)->with('course_id', $course_id);
     }
     public function store(Request $request,int $course_id){
-     // Validate the incoming request data
-     $validatedData = $request->validate([
-        'file_name' => ['required'],
-        'file_path' => ['required'],
-        'file_type' => ['mimetypes:video/*,application/pdf'],// Allowed types (adjust as needed)
-        'section_id' => ['exists:sections,id']
-    ]);
-    
-
-    $file = $request->file('file_path');
-
-    $fileType = $file->getClientOriginalExtension();
-    $section = Section::where('course_id', $course_id)->firstOrFail(); // Example query
-    $section_id = $section->id;
-    
-        $validatedData['file_type']=$fileType;
-        $validatedData['section_id']=$section_id;
-    $sectionContent = SectionContents::create($validatedData);
-    
-    try {
-        $sectionContent->save();
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'file_name' => ['required'],
+            'file_path' => ['required'],
+            'file_type' => ['mimetypes:video/*,application/pdf'], // Allowed types (adjust as needed)
+            'section_id' => ['exists:sections,id']
+        ]);
         
-// Define the target folder for uploaded videos
-$target_directory = "video/*";
+        $file = $request->file('file_path');
+        $file_name = $file->getClientOriginalName(); // Get the original file name
 
-// Check if the video file was uploaded without errors
-if (isset($_FILES["file_path"]) && $_FILES["video_file"]["error"] == UPLOAD_ERR_OK) {
-    // Get the uploaded file name
-    $video_name = $_FILES["file_path"]["name"];
-
-    // Construct the path where the video will be stored
-    $target_path = $target_directory . $video_name;
-
-    // Move the uploaded video file to the target directory
-    if (move_uploaded_file($_FILES["file_path"]["tmp_name"], $target_path)) {
-        echo "The video file " . $video_name . " has been uploaded successfully.";
-    } else {
-        echo "Sorry, there was an error uploading your video file.";
+        // Retrieve the uploaded file
+        // Get the file name and extension
+        $fileExtension = $file->getClientOriginalExtension();   
+    
+        // Define the storage location and path
+        $storagePath = 'uploads/'; // Adjust folder name if needed
+        $fileName = uniqid('video_') . '.' . $file->getClientOriginalExtension();
+        $filePath = $storagePath . $fileName; // Path within storage disk
+    
+        // Store the file using Laravel's storage helper
+        $stored = Storage::disk('public')->put($filePath, $file); // Use 'public' or your defined disk
+    
+        $fileType = $file->getClientOriginalExtension();
+        $section = Section::where('course_id', $course_id)->firstOrFail(); // Example query
+        $section_id = $section->id;
+        
+        $validatedData['file_type']=$fileType;
+        $validatedData['file_path']=$filePath;
+        $validatedData['section_id']=$section_id;
+        $sectionContent = SectionContents::create($validatedData);
+        
+        $sectionContent->save();
+        return redirect()->back();
     }
-} else {
-    echo "Sorry, there was an error uploading your video file.";
-}
-$sectionContent->save();
-
-    } catch (\Exception $e) {
-        // Log the error
-        Log::error($e->getMessage());
-    }
-}
+    
 }

@@ -314,6 +314,11 @@
     {{ session('success') }}
 </div>
 @endif
+@if(@session('message'))
+<div class="alert alert-success">
+    {{ session('message') }}
+</div> 
+@endif
 <section style="display:flex;padding:10% ;height:100%; background-color:rgb(231, 227, 215)" >
 
 <div style="width: 50%">

@@ -16,7 +16,11 @@ background: radial-gradient(circle, rgba(238,174,202,1) 42%, rgba(148,187,233,1)
 </style>
 <div class="container" >
 <h1 class="p-relative">Courses waiting for approved: </h1>
-
+@if(@session('message'))
+<div class="alert alert-success">
+    {{ session('message') }}
+</div> 
+@endif
 @foreach ($courses as $course)
 @if(!$course->approved)
 <div class="course-rectangle">
@@ -27,5 +31,5 @@ background: radial-gradient(circle, rgba(238,174,202,1) 42%, rgba(148,187,233,1)
 @endif
 @endforeach
 
-</div>
+</d>
 @endsection
