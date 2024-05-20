@@ -3,9 +3,10 @@
 
 <link rel="stylesheet" href="css/Cards-courses.css">
 <div class="container">
-  <h2 class="container-heading">All Courses</h2>   
+  <h2 class="container-heading">All Courses</h2>
+  @if(Auth::check() && Auth::user()->role == 'teacher')
 <button id="openModalButton" type="button" class="btn btn-primary">Add Course</button>
-
+@endif
 <!-- Modal -->
 <div id="courseModal" class="modal" tabindex="-1">
   <div class="modal-dialog">
@@ -15,7 +16,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <form  method="POST" action="{{route('courses.store')}}">
+      <form  method="POST" action="{{route('courses.store')}}"   enctype="multipart/form-data" >
           @csrf
           <label for="exampleInputName" class="form-label">Course name</label>
             <input type="text" class="form-control" id="exampleInputName" name="name" aria-describedby="nameHelp">
@@ -23,6 +24,9 @@
             <textarea class="form-control" id="sectionDescription" rows="3" name="description"></textarea>
             <label for="exampleInputName" class="form-label" alt="Every">Tags</label>
             <input type="text" class="form-control" id="exampleInputName" name="tags" aria-describedby="tagsHelp" placeholder="please put ',' in between your tags" >
+            <label for="exampleInputimage" class="form-label" alt="Every">Image</label>
+            <input type="file" name="image" class="form-control" id="exampleInputName" >
+      
             <button type="submit" class="btn btn-primary">Create Course</button>
 
         </form>
@@ -58,7 +62,13 @@
                     @endphp
 
             <a href="/courses/{{$course['id']}}" class="card-item">
+           
+            @if($course->image)
+    <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->name }}" class="img-fluid">
+@else
                 <img src="images/bg-img.jpg" alt="Card Image">
+@endif
+                <h2>{{$course->name}}</h2>
                 <h4>{{$course->teacher}}</h4>
                 @foreach ($tags as $tag)
               <span class="developer">{{ $tag }}</span>
@@ -71,11 +81,7 @@
                 </div>
                 <h3>{{ $course->description }}</h3>
                 @if (Auth::check() && $course->teacher !=  Auth::user()->name )
-         <form action="{{ route('courses.enroll')}}" method="POST">
-          @csrf <!-- CSRF protection -->  
-          <input type="hidden" name="course_id" value="{{ $course->id }}">
-          <button type="submit" class="btn btn-primary">Enroll</button>
-        </form>
+      
          @endif
                 <div class="arrow"> 
                     <i class="fas fa-arrow-right card-icon"></i>

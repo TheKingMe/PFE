@@ -673,7 +673,7 @@ button[type="submit"]:hover {
     background-color: #0056b3; /* Button background color on hover */
 }
 
-#videoContainer {
+.videoContainer {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -747,24 +747,26 @@ button[type="submit"]:hover {
 @error('section_id')
 <div class="text-danger">{{ $message }}</div>
 @enderror
-<div class="modal2" tabindex="-1" id="modal2"  >
+<div class="modal2" tabindex="-1" id="modal2" >
   <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Modal title</h5>
         <button type="button" class="btn-close" id="closeModel1" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-            <div id="Vedio_path">
+            <div id="Vedio_path" >
 
-        <form method="POST" action="{{ route("content.store", ['course_id' => $course_id]) }}" onsubmit="return validateFile()" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('content.store', ['course_id' => $course_id]) }}" onsubmit="return validateFile()" enctype="multipart/form-data">
           @csrf
+          
       <label for="file_name">give file name:</label><br>
         <input type="text" name="file_name"><br>
         <label for="video">Upload Video:</label><br>
         <input type="file" name="file_path" accept="video/*">
+        <input type="hidden" id="sectionIdInput" name="section_id" value="">  
+
         <button type="submit" class="btn btn-primary">Save changes</button>
 
-        {{-- <input type="hidden" name="section_id" value="{{$section_id}}"> --}}
     </form>
       </div>
 
@@ -776,12 +778,12 @@ button[type="submit"]:hover {
       <input type="text" name="file_name" ><br>
       <label for="pdf">Upload PDF:</label><br>
       <input type="file" name="file_path" accept="application/pdf">
-      {{-- <input type="hidden" name="section_id" value="{{$section_id}}">--}}
+     <input type="hidden" id="Pdf_id" name="section_id" value="">
        
   <button type="submit" class="btn btn-primary">Save changes</button>
 
         </form>
-        </div> 
+    </div> 
 
       </div>
       <div class="modal-footer">
@@ -793,13 +795,18 @@ button[type="submit"]:hover {
 
     <div class="container mx-auto p-6 ">
 
-        <table id="dataTable" class="w-full whitespace-no-wrap bg-white dark:bg-gray-800 overflow-hidden table-striped">
+        <table id="dataTable" class="w-full whitespace-no-wrap bg-white overflow-hidden table-striped">
           <thead>
             <tr>
               <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="name">Name</th>
               <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="content">Content</th>
               {{-- <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="status">Status</th> --}}
-              <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs">Actions</th>
+              <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs">Actions 
+                <select name='vedio_pdf' id="vedio_pdf"  onchange="toggleFileUpload()">
+                  <option value="1">Video</option>
+                  <option value="2">PDF</option>
+              </select>
+              </th>
             </tr>
           </thead>
           <tbody id="sections-container">
@@ -814,27 +821,27 @@ button[type="submit"]:hover {
          
                 
           <td>
-             @foreach ($sectionContents as $Sc)
-              @if ($Sc->section_id == $sections->id)
-              <a href="#" id="showVideoLink" class="video-link">{{ $Sc->file_name }}</a><br>
-              <?php              
-              
-              $f_p = null; // Initialize with null to avoid potential errors
-
-              $files = glob('storage/' . $Sc->file_path . '/*');
-
-if (count($files) === 1) {
-  $f_p = $files[0];
-}
-?>
-<div id="videoContainer" style="display: none;" >
-<video id="videoPlayer" width="200" height="200" controls autoplay>
-  <source src="{{ asset($f_p) }}" type="video/mp4">
-</video>
- </div>
-              @endif
-
+            @foreach ($sectionContents as $Sc)
+            @if ($Sc->section_id == $sections->id)
+                <?php
+                $videoId = 'video_' . $Sc->id; // Unique ID for each video
+                $pdfId = 'pdf_' . $Sc->id;
+                $f_p = null; // Initialize with null to avoid potential errors
+                $files = glob('storage/' . $Sc->file_path . '/*');
+        
+                if (count($files) === 1) {
+                    $f_p = $files[0];
+                }
+                ?>
+                <a href="#" id="{{ $videoId }}" onclick="showVideo('{{ $videoId }}');" class="video-link">{{ $Sc->file_name }}</a><br>
+                <div id="videoContainer_{{ $Sc->id }}" class="videoContainer" style="display: none;">
+                    <video id="videoPlayer_{{ $Sc->id }}" width="500" height="500" controls >
+                        <source src="{{ asset($f_p) }}" type="video/mp4">
+                    </video>
+                </div>
+            @endif
         @endforeach
+        
           </td>
                         
 
@@ -843,7 +850,7 @@ if (count($files) === 1) {
              <a href="#" class="button-update">Update</a>
              <a href="#" class="button-delete">Delete</a>--}}
       
-             <input type="button" id="editSectionNam" class="button-update" style="margin-right: 10px" onclick="document.getElementById('modal2').style.display='block'" value="Add Content">
+             <input type="button" id="editSectionNam" class="button-update" style="margin-right: 10px" onclick="document.getElementById('modal2').style.display='block';let section_id = {{$sections->id}}; document.getElementById('sectionIdInput').value = section_id; document.getElementById('Pdf_id').value = section_id;" value="Add Content">
              <form method="POST" action="{{ route('section.delete', ['id' => $sections->id]) }}">
               @csrf
               @method('DELETE')
@@ -868,13 +875,14 @@ if (count($files) === 1) {
                 </symbol>
             </svg>
           </form>
-             <select name='vedio_pdf' id="vedio_pdf"  onchange="toggleFileUpload()">
+             {{-- <select name='vedio_pdf' id="vedio_pdf_{{$sections->id}}"  onchange="toggleFileUpload({{$sections->id}})">
               <option value="1">Video</option>
               <option value="2">PDF</option>
-          </select>
+          </select> --}}
           </td>
         </tr>
         @endif
+        
           @endforeach
             {{-- add section here --}}
           </tbody>
@@ -907,23 +915,88 @@ if (count($files) === 1) {
 
 </script>
 <script>
-document.getElementById('showVideoLink').addEventListener('click', function() {
-  var videoContainer = document.getElementById('videoContainer');
-  if (videoContainer.style.display === 'none') {
-    videoContainer.style.display = 'block';
-  } else {
-    videoContainer.style.display = 'none';
-  }
-});
+// document.getElementById('showVideoLink').addEventListener('click', function() {
+//   var videoContainer = document.getElementById('videoContainer');
+//   if (videoContainer.style.display === 'none') {
+//     videoContainer.style.display = 'block';
+//   } else {
+//     videoContainer.style.display = 'none';
+//   }
+// });
 
 
+// window.addEventListener('click', function(event) {
+//   var videoContainer = document.getElementById('videoContainer');
+//   var showVideoLink = document.getElementById('showVideoLink');
+//   if (event.target !== videoContainer && event.target !== showVideoLink) {
+//     videoContainer.style.display = 'none';
+//   }
+// });
+function showVideo(videoId) {
+    var videoContainerId = 'videoContainer_' + videoId.split('_')[1];
+    var videoContainer = document.getElementById(videoContainerId);
+    if (videoContainer.style.display === 'none') {
+        videoContainer.style.display = 'block';
+    } else {
+        videoContainer.style.display = 'none';
+    }
+}
+
+// window.addEventListener('click', function(event) {
+//     var videoContainers = document.querySelectorAll('[id^="videoContainer_"]');
+//     var videoLinks = document.querySelectorAll('[id^="video_"]');
+//     videoContainers.forEach(function(videoContainer) {
+//         if (event.target !== videoContainer && !Array.from(videoLinks).includes(event.target)) {
+//             var videoPlayerId = 'videoPlayer_' + videoContainer.id.split('_')[1];
+//             var videoPlayer = document.getElementById(videoPlayerId);
+//             if (!videoPlayer.paused) {
+//                 videoPlayer.pause();
+//             }
+//             videoContainer.style.display = 'none';
+//         }
+//     });
+// });
+
+
+// window.addEventListener('click', function(event) {
+//     var videoContainers = document.querySelectorAll('[id^="videoContainer_"]');
+//     var videoLinks = document.querySelectorAll('[id^="video_"]');
+//     videoContainers.forEach(function(videoContainer) {
+//         if (event.target !== videoContainer && !Array.from(videoLinks).includes(event.target)) {
+//             var videoPlayerId = 'videoPlayer_' + videoContainer.id.split('_')[1];
+//             var videoPlayer = document.getElementById(videoPlayerId);
+//             // Check if the video player exists and if it's already playing
+//             if (videoPlayer && !videoPlayer.paused) {
+//                 videoPlayer.pause(); // Pause the video if it's playing
+//             }
+//             videoContainer.style.display = 'none';
+//         }
+//     });
+// });
 window.addEventListener('click', function(event) {
-  var videoContainer = document.getElementById('videoContainer');
-  var showVideoLink = document.getElementById('showVideoLink');
-  if (event.target !== videoContainer && event.target !== showVideoLink) {
-    videoContainer.style.display = 'none';
-  }
+    var videoContainers = document.querySelectorAll('[id^="videoContainer_"]');
+    var videoLinks = document.querySelectorAll('[id^="video_"]');
+    videoContainers.forEach(function(videoContainer) {
+        if (event.target !== videoContainer && !Array.from(videoLinks).includes(event.target)) {
+            var videoPlayerId = 'videoPlayer_' + videoContainer.id.split('_')[1];
+            var videoPlayer = document.getElementById(videoPlayerId);
+            // Check if the video player exists and if it's already playing
+            if (videoPlayer && !videoPlayer.paused && !isContentAdded()) {
+                videoPlayer.pause(); // Pause the video if it's playing and content is not added
+            }
+            videoContainer.style.display = 'none';
+        }
+    });
 });
+
+// Function to check if content is added
+function isContentAdded() {
+    // Add your logic here to check if content is added
+    // For example, you can check if certain elements exist on the page
+    // Return true if content is added, otherwise return false
+    return document.querySelectorAll('.content').length > 0; // Example logic, adjust as per your requirement
+}
+
 </script>
 
 <script>
@@ -1100,5 +1173,36 @@ submitBtn.addEventListener("click", function() {
     
 }
   </script>
+  <!-- Button to open the modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createQuizModal">
+  Add Quiz
+</button>
+
+<!-- Modal for creating a quiz -->
+<div class="modal fade" id="createQuizModal" tabindex="-1" aria-labelledby="createQuizModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createQuizModalLabel">Create Quiz</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="createQuizForm" action="{{ route('quiz.store',$course_id)}}" method="POST">
+          @csrf
+          <input type="hidden" name="course_id" value="{{$course_id}}">
+          <div class="mb-3">
+            <label for="quizTitle" class="form-label">Quiz Title</label>
+            <input type="text" class="form-control" id="quizTitle" name="title" required>
+          </div>
+          <div class="mb-3">
+            <label for="quizDescription" class="form-label">Quiz Description</label>
+            <textarea class="form-control" id="quizDescription" name="description" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Quiz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 

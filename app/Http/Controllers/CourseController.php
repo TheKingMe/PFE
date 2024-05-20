@@ -41,23 +41,20 @@ class CourseController extends Controller
   
     
 
-    public function store(){
+    public function store(Request $request){
+        
         $teacherId = auth()->id();
-        request()->validate([
+        $data = request()->validate([
             'name' => ['required', 'min:3'],
             'description' => ['required', 'min:5'],
             // 'teacher' => ['required', 'exists:users,id'],
             // 'rating' => ['required', 'numeric', 'min:1', 'max:5'], // Assuming rating is a numeric value between 1 and 5
-            
+           'image'=>['nullable','image','mimes:jpeg,png,jpg,gif','max:2048'],
             'tags' => ['string', 'max:255'], // Assuming each tag is a string with a maximum length of 255 characters
             
             //hadak knt daro ch7al h
         ]);
-    
-        $data = request()->all();
-
-    //
-    
+     
         // Assuming you want to store this data in a database, you can do something like this:
             //    $path = request()->file('file_path')->store('public');
               //$url = Storage::url($path);
@@ -66,11 +63,15 @@ class CourseController extends Controller
                $course->name = $data['name'];
                 $course->tags = $data['tags'];
                $course->description = $data['description'];
+               
               $course->teacher = Auth::user()->name;
                $course->rating = 0;
                $course->approved = false;
-
-                                 
+             if ($request->hasFile('image')) {
+              $imagePath = $request->file('image')->store('course_images', 'public');
+              $course->image = $imagePath;
+            }
+                               
                $course->save();
                  $course_id = $course->id;
 
@@ -107,34 +108,30 @@ class CourseController extends Controller
     // }
 
 
-public function enroll(Request $request)
-{
-    // Get the authenticated user
-    $user = Auth::user();
-     $validatedData = $request->validate([
-        'course_id' => ['required'],
-     ]);
-        
-
-    // Get the course ID from the form submission
-    $courseId = $request->input('course_id');
-
-    // Check if the user is already enrolled in the course
-    if ($user->courses()->where('course_id', $courseId)->exists()) {
-        return redirect()->route('Courses.index')->with('error', 'You are already enrolled in this course.');
+    public function enroll($id)
+    {
+        // Get the authenticated user
+        $user = Auth::user();
+    
+        // Get the course ID from the route parameter
+        $courseId = $id;
+    
+        // Check if the user is already enrolled in the course
+        if ($user->courses()->where('course_id', $courseId)->exists()) {
+            return redirect()->route('courses.show',['id'=>$courseId])->with('error', 'You are already enrolled in this course.');
+        }
+    
+        // Enroll the user in the course
+        $user->courses()->attach($courseId);
+    
+        // Redirect the user back to the course page or any other appropriate page
+        return redirect()->route('courses.show', ['id' => $courseId])->with('success', 'Enrolled successfully!');
     }
-
-    // Enroll the user in the course
-    $user->courses()->attach($courseId);
-
-    // Redirect the user back to the course page or any other appropriate page
-    return redirect()->route('courses.show', ['id' => $courseId])->with('success', 'Enrolled successfully!');
-}
 public function search(Request $request)
 {
     $query = $request->input('search');
    
-    $courses = Course::where('name', 'like', "%$query%")->get();
+    $courses = Course::where('name', 'like', "%$query%")->orWhere('tags','like',"%$query%")->orWhere('teacher','like',"%$query%")->get();
     
     return view('search-results', compact('courses'));//wa9ila sf db khas  ghi nrj3oha b7alha b7al dik page d courses
     //z3n

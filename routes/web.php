@@ -12,11 +12,11 @@ use App\Http\Controllers\admincontroller;
 use App\Http\Controllers\coursepagecontroller;
 use App\Models\section;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\quizcontroller;
 use App\Models\SectionContents;
 
 
-Route::get('/accueil', [AccueilController::class, 'index'])->middleware('verified')->name('accueil');
+Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');
 Route::post('/courses/search',[CourseController::class , 'search'])->name('courses.search');
 Route::post('/logout',[UserController::class,'logout'])->name('logout');
 Route::get('/courses/add/{course_id}', [SectionController::class, 'create'])->name('Add.create');
@@ -70,10 +70,17 @@ Route::get('courses/add/{id}', function ($id) {
 })->name('video.show');
 
 //Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
-    Route::post('/courses/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
+    Route::post('/course/{id}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
 Route::delete('/course/{id}',[coursepagecontroller::class,'delete'])->name('course.delete');
 Route::post('course/{id}',[coursepagecontroller::class,'approve'])->name('course.approve');
-// Auth::routes([
-//     'verify'=>true
-// ]);
-//lay3az chatGBT
+Route::post('/courses/add/{course_id}/quiz', [QuizController::class, 'store'])->name('quiz.store');
+Route::get('/courses/add/{course_id}/quizCreate', [QuizController::class, 'create'])->name('quiz.create');
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});

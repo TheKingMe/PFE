@@ -19,12 +19,18 @@ class coursepagecontroller extends Controller
 
       return redirect()->route('adminstration')->with('message', 'Course deleted successfully');
    }
-   public function approve($id)
+   public function approve(Request $request,$id)
    {
+      $request->validate([
+         'price' => 'required|numeric|min:0',
+     ]);
        $course = Course::findOrFail($id);
        $course->approved = true;
+       $course->price = $request->input('price');
        $course->save();
+      
 
-       return redirect()->route('adminstration')->with('message', 'Course approved successfully');
+       return redirect()->route('adminstration')->with('message', 'Course approved successfully and price set');
+
    }
 }

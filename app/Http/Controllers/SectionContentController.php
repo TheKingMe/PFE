@@ -19,7 +19,7 @@ class SectionContentController extends Controller
         $section = Section::where('course_id', $course_id)->firstOrFail(); // Example query
         $section_id = $section->id;
         
-        return view('add')->with('section_id', $section_id)->with('course_id', $course_id);
+        return view('add', compact('course_id', 'section_id')); // Pass both course_id and section_id to the view
     }
     public function store(Request $request,int $course_id){
         // Validate the incoming request data
@@ -51,7 +51,7 @@ class SectionContentController extends Controller
         
         $validatedData['file_type']=$fileType;
         $validatedData['file_path']=$filePath;
-        $validatedData['section_id']=$section_id;
+        $validatedData['section_id']=$request->input('section_id');
         $sectionContent = SectionContents::create($validatedData);
         
         $sectionContent->save();

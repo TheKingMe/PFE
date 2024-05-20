@@ -570,6 +570,9 @@
   <div class="page d-flex" style="width: 100%;">
       <div class="content w-full d-flex" style="max-width: 100%;">
           <div class="courses-page d-grid m-20 gap-20">
+            @if ($courses != Null)
+              
+            
               @foreach ($courses as $course)
               <div class="course bg-white rad-6 p-relative">
                   <img class="cover" src="imgs/course-01.jpg" alt="" />
@@ -627,6 +630,7 @@
       </div>
         @endif
     @endforeach
+    @endif
     </div>
       </div>
     </div>
