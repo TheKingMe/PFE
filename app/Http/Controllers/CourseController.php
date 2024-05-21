@@ -117,15 +117,16 @@ class CourseController extends Controller
         $courseId = $id;
     
         // Check if the user is already enrolled in the course
-        if ($user->courses()->where('course_id', $courseId)->exists()) {
-            return redirect()->route('courses.show',['id'=>$courseId])->with('error', 'You are already enrolled in this course.');
-        }
+        // if ($user->courses()->where('course_id', $courseId)->exists()) {
+        //     return redirect()->route('courses.show',['id'=>$courseId])->with('error', 'You are already enrolled in this course.');
+        // }
     
         // Enroll the user in the course
-        $user->courses()->attach($courseId);
+        // $user->courses()->attach($courseId);
     
         // Redirect the user back to the course page or any other appropriate page
-        return redirect()->route('courses.show', ['id' => $courseId])->with('success', 'Enrolled successfully!');
+        return redirect()->route('payment.index', ['id' => $id]);
+
     }
 public function search(Request $request)
 {

@@ -233,6 +233,9 @@ $f_p = $files[0];
           <input type="hidden" name="course_id" value="{{ $course->id }}">
           <button type="submit" class="btn btn-primary">Enroll</button>
 </form>
+@endif 
+@if(auth()->user()->isenrolled($course->id))
+<a href="/courses/{{$course['id']}}/test">pass the test</a>
 @endif
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

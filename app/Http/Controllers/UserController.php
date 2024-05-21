@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Hash; // Import the Hash facade
 use App\Models\User; // Import the User model
 use Illuminate\Validation\Rule; 
 use Illuminate\Validation\ValidationException;// Import Rule class
+use Illuminate\Auth\Events\Registered; // Import the Registered event class
+
 
 class UserController extends Controller
 {
@@ -16,6 +18,8 @@ class UserController extends Controller
     }
 
    
+
+
     public function store(Request $request)
     {
        try{ 
@@ -27,14 +31,17 @@ class UserController extends Controller
 
         ]);
 
+
         // Hash the password before storing it
    $FormFields['password'] = Hash::make($FormFields['password']);
 
         // Create a new user with the validated data
         $user = User::create($FormFields);
+        event(new Registered($user)); 
 
         // Redirect the user somewhere after successful submission
-        return redirect('/accueil')->with('success', 'User created successfully!');
+
+     return redirect('/accueil')->with('success', 'User created successfully!');
     }catch(ValidationException $e){
         return redirect()->back()->withErrors($e->validator->errors())->withInput();
 }
@@ -64,4 +71,6 @@ $request = session()->regenerateToken();
 return redirect()->route('accueil')->with('message','you have been logged out');
  
 }
+
+
 }

@@ -58,4 +58,5 @@ class SectionContentController extends Controller
         return redirect()->back();
     }
     
+    
 }

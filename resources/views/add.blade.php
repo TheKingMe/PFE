@@ -707,8 +707,33 @@ button[type="submit"]:hover {
      
     </div>
   </div> 
+  <form id="changeOrderForm" method="POST" action="{{ route('change_order_range', ['course_id' => $course_id]) }}" enctype="multipart/form-data" novalidate>
+    @csrf
+    <label for="startOrder">Start Order:</label>
+    <input type="number" id="startOrder" name="startOrder" required>
+    <label for="endOrder">End Order:</label>
+    <input type="number" id="endOrder" name="endOrder" required>
+    <button type="submit">Change Order</button>
+</form>
+@if (session('success_change_order'))
+    <div class="alert alert-success">
+        {{ session('success_change_order') }}
+    </div>
+@endif
+
+<!-- Display validation errors -->
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div id="myModal" class="modall">
-    <form method="POST" action="{{route('Add.store')}}" class="modal-content" enctype="multipart/form-data">
+    <form method="POST" action="{{route('Add.store')}}" class="modal-content" enctype="multipart/form-data" >
         @csrf
         
         <span class="closee" id="spanid">&times;</span> <!-- Close button at the end -->
@@ -798,6 +823,7 @@ button[type="submit"]:hover {
         <table id="dataTable" class="w-full whitespace-no-wrap bg-white overflow-hidden table-striped">
           <thead>
             <tr>
+              <th>order</th>
               <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="name">Name</th>
               <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="content">Content</th>
               {{-- <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="status">Status</th> --}}
@@ -809,14 +835,15 @@ button[type="submit"]:hover {
               </th>
             </tr>
           </thead>
-          <tbody id="sections-container">
+          <tbody id="sections-container" >
             
              
              </script>
-      @foreach ($section as $sections)
+      @foreach ($section->sortBy('order') as $sections)
           
           @if($sections->course_id==$course_id)
-          <tr>
+          <tr >
+            <td data-id="{{ $sections->id }}" >{{$sections->order}}</td>
           <td><a>{{$sections->name}}</a></td>
          
                 
@@ -880,6 +907,7 @@ button[type="submit"]:hover {
               <option value="2">PDF</option>
           </select> --}}
           </td>
+        
         </tr>
         @endif
         
@@ -1196,7 +1224,8 @@ submitBtn.addEventListener("click", function() {
           </div>
           <div class="mb-3">
             <label for="quizDescription" class="form-label">Quiz Description</label>
-            <textarea class="form-control" id="quizDescription" name="description" required></textarea>
+            <textarea class="form-control" id="quizDescription" name="desription" required></textarea>
+           
           </div>
           <button type="submit" class="btn btn-primary">Create Quiz</button>
         </form>
@@ -1204,5 +1233,7 @@ submitBtn.addEventListener("click", function() {
     </div>
   </div>
 </div>
+
+
 @endsection
 
