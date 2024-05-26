@@ -1,7 +1,12 @@
+
+
 @extends('layout')
 @section('title','course')
 
+  
+
 @section('content')
+
 @if(@session('success'))
 <div class="alert alert-success">
     {{ session('success') }}
@@ -11,7 +16,10 @@
 <div class="alert alert-success">
     {{ session('error') }}
 </div> 
+
 @endif
+
+
 @if(Auth::check() && Auth::user()->role == 'admin' && $course->approved == false)
     <form method="POST" action="{{ route('course.delete', $course->id) }}">
         @csrf
@@ -234,7 +242,7 @@ $f_p = $files[0];
           <button type="submit" class="btn btn-primary">Enroll</button>
 </form>
 @endif 
-@if(auth()->user()->isenrolled($course->id))
+@if(auth::check() && auth::user()->isenrolled($course->id))
 <a href="/courses/{{$course['id']}}/test">pass the test</a>
 @endif
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -299,7 +307,8 @@ $f_p = $files[0];
 //         if (event.target !== videoContainer && event.target !== showVideoLink) {
 //           videoContainer.style.display = 'none';
 //         }
-//             }     
+//             } 
+
 function showVideo(videoId) {
     var videoContainerId = 'videoContainer_' + videoId.split('_')[1];
     var videoContainer = document.getElementById(videoContainerId);
@@ -361,5 +370,6 @@ window.addEventListener('click', function(event) {
 
 
             </script>
-      
+ 
+  
 @endsection

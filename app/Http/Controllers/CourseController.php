@@ -27,8 +27,8 @@ class CourseController extends Controller
     }
      public function index()
         {
-        $courses = Course::all();
-        return view('courses')->with('courses', $courses);  
+            $courses = Course::paginate(3); 
+            return view('courses')->with('courses', $courses);  
     } 
 
     public function create()
@@ -128,17 +128,22 @@ class CourseController extends Controller
         return redirect()->route('payment.index', ['id' => $id]);
 
     }
-public function search(Request $request)
-{
-    $query = $request->input('search');
-   
-    $courses = Course::where('name', 'like', "%$query%")->orWhere('tags','like',"%$query%")->orWhere('teacher','like',"%$query%")->get();
-    
-    return view('search-results', compact('courses'));//wa9ila sf db khas  ghi nrj3oha b7alha b7al dik page d courses
-    //z3n
-}
-public function tag($tag)
-{
+        public function search(Request $request)
+        {
+            $query = $request->input('search');
+            $page = $request->input('page', 1);
+        
+            $courses = Course::where('name', 'like', "%$query%")
+                ->orWhere('tags', 'like', "%$query%")
+                ->orWhere('teacher', 'like', "%$query%")
+                ->paginate(3, ['*'], 'page', $page)
+                ->appends(['search' => $query]);
+        
+            return view('search-results', compact('courses', 'query', 'page'));
+        }
+        
+    public function tag($tag)
+    {
     // Retrieve courses that have the specified tag
     $courses = Course::where('tags', 'like', "%$tag%")->get();
     

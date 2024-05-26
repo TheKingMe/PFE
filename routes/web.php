@@ -30,7 +30,7 @@ Route::get('/courses/payment/{id}',[paymentController::class,'index'])->name('pa
 Route::post('/courses/payment/{id}/store', [PaymentController::class,'store'])->name('payment.store');
 
 Route::get('/accueil', [AccueilController::class, 'index'])->name('accueil');
-Route::post('/courses/search',[CourseController::class , 'search'])->name('courses.search');
+Route::post('/search',[CourseController::class , 'search'])->name('courses.search');
 Route::post('/logout',[UserController::class,'logout'])->name('logout');
 Route::get('/courses/add/{course_id}', [SectionController::class, 'create'])->name('Add.create')->middleware('verified');;
 Route::get('/courses/tag/{tag}', [CourseController::class,'tags'])->name('courses.tag');
@@ -64,6 +64,10 @@ Route::get('/courses', [CourseController::class, 'index'])->name('Courses.index'
 //Route::get('/courses/{id}',[coursepagecontroller::class, 'index'])->name('courseId.index');
     
 Route::get('/courses/{id}', function ($id) {
+    if(!Auth::check())
+    {
+     return redirect()->back()->with('erreur','dont touche me again');
+    }
     $course = Course::findOrFail($id);
     $sections = Section::all();
     $contents = SectionContents::all();

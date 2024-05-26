@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\section;
 use App\Models\course;
 use App\Models\SectionContents;
+use Illuminate\Support\Facades\Auth;
 class coursepagecontroller extends Controller
 {
    public function index(){
+
+
+
     $sections = section::all();
    
     return view(('courses/{id}'),compact('sections'));

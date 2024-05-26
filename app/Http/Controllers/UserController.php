@@ -8,7 +8,7 @@ use App\Models\User; // Import the User model
 use Illuminate\Validation\Rule; 
 use Illuminate\Validation\ValidationException;// Import Rule class
 use Illuminate\Auth\Events\Registered; // Import the Registered event class
-
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -59,6 +59,9 @@ $FormField = $request->validate([
 ]);
 if(auth()->attempt($FormField)){
     $request->session()->regenerate();
+    if(Auth::user()->role == 'admin'){
+        return redirect()->route('adminstration')->with('succes','welcome admin');
+    }
     return redirect()->route('welcome')->with('message','you are logged in');
 
 }

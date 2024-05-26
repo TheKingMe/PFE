@@ -18,6 +18,9 @@ class paymentController extends Controller
     $user = auth()->user();
 
     $courseId = $id;
+    if ($user->courses()->where('course_id', $courseId)->exists()) {
+        return redirect()->route('courses.show',['id'=>$courseId])->with('error', 'You are already enrolled in this course.');
+    }
 
     $data = $request->validate([
         'card_number' => ['required', 'digits:16'],

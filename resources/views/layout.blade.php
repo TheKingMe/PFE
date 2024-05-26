@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title','custom')</title>
     <link rel="stylesheet" href="css/Style.css">
-    <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/Scroll-cards.css">
 <link rel="stylesheet" href="{{ asset('css/framework.css') }}">
 <link rel="stylesheet" href="{{asset('css/all.min.css')}}">
@@ -24,7 +23,7 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="margin:0;">
         <div class="container-fluid">
-          <a class="navbar-brand" href="accueil">KA3KA3</a>
+          <a class="navbar-brand" href="{{route('accueil')}}">KA3KA3</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -33,19 +32,22 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{route('Courses.index')}}">Courses</a>
               </li>
-             
+              @auth
+
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Link
+                  {{auth()->user()->name}}
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  @if(auth()->user()->role=='teacher')
+                      
+                  <li><a class="dropdown-item" href="{{route('welcome')}}">My courses</a></li>
+                  @endif
                   <li><a class="dropdown-item" href="#">Another action</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">Something else here</a></li>
                 </ul>
               </li>
-              @auth
               <li>
               <form method="post" action="{{route('logout')}}"> 
                 @csrf
@@ -64,6 +66,8 @@
             <form class="d-flex" role="search" method="post" action="{{ route('courses.search') }}">
             @csrf
               <input class="form-control me-2" name="search" type="text" placeholder="Search" aria-label="Search">
+              <input type="hidden" name="page" id="page" value="{{ request('page', 1) }}">
+
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
           </div>
@@ -72,7 +76,7 @@
 
 @yield('content')
 
-<link rel="stylesheet" href="css/footer.css" >
+<link rel="stylesheet" href="{{asset('css/footer.css')}}" >
 <footer class="footer_area section_padding_130_0">
       <div class="container">
         <div class="row">
@@ -144,5 +148,4 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"> </scipt>
 </body>
-
 </html>

@@ -14,15 +14,6 @@
   align-items: center; /* Align the scroll icon vertically */
 }
 
-.product-list-container {
-  position: relative;
-  overflow-x: auto;
-  white-space: nowrap;
-  scrollbar-width: none;
-  scrollbar-color: #333 #ccc;
-  cursor: pointer;
-}
-
 .product-list {
   display: flex;
   flex-direction: row;
@@ -50,10 +41,7 @@
   font-size: 0.8em;
 }
 
-.product-card img {
-  width: 100%;
-  height: auto;
-}
+
 
 /* Style scrollbar for Chrome, Safari, and Opera */
 .product-list-container::-webkit-scrollbar {
@@ -95,7 +83,7 @@
   display: -webkit-box; /* Required for -webkit-line-clamp */
   -webkit-line-clamp: 2; /* Limit the description to 2 lines */
   -webkit-box-orient: vertical; /* Ensure text is vertically oriented */
-  overflow: hidden; /* Hide any overflowing text */
+  overflow:hidden ; /* Hide any overflowing text */
   text-overflow: ellipsis; /* Add an ellipsis (...) for truncated text */
 }
 
@@ -235,8 +223,10 @@
     white-space: nowrap;
     scrollbar-width: none;
     scrollbar-color: #333 #ccc;
-    cursor: pointer;
     flex: 1; /* Take up remaining horizontal space */
+  }
+  .product-card:hover{
+    background-color: powderblue;
   }
 
   .product-list {
@@ -257,24 +247,8 @@
     font-size: 0.8em;
   }
 
-  .product-card img {
-    width: 100%;
-    height: auto;
-  }
-
-  .product-card h3 {
-    font-size: 18px;
-    margin-bottom: 5px;
-  }
-
-  .product-card p {
-    font-size: 14px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  
+ 
 
 
 
@@ -332,21 +306,36 @@
 </div>
 
 </section>
+  <?php
+  $sum=0;
+  ?>
+  @foreach ($courses as $course )
+  <?php
+  $sum+=1;
+  ?>
+  @endforeach
 <section style="display:flex;padding:5%">
     <div>
     <div>
-    <h2 class="mb-5" style="font-size: 20px">A broad selection of courses</h2>
-    <h5 class="mb-5" style="font-size: 20px">Choose from over 210,000 online video courses with new additions published every month</h5>
+    <h1 class="mb-5" style="font-size: 20px">A broad selection of courses</h1>
+    <h5 class="mb-5" style="font-size: 20px">Choose from over {{$sum}} online video courses with new additions published every month</h5>
 </div>
 <div class="row row-cols-1 row-cols-md-3 g-4">
+
   @foreach ($courses as $course)
     
     <div class="col">
       <div class="card h-100">
-        <img src="images/bg-img.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
+        @if ($course->image)
+          
+        <img src="{{ asset('storage/' . $course->image) }}" style="height: 80%;" class="card-img-top" alt="{{ $course->name }}">
+       @else
+       <img src="images/bg-img.jpg" class="card-img-top" style="height: 80%" alt="{{ $course->name }}">
+
+        @endif
+ <div class="card-body">
           <h5 class="card-title"> {{$course->name}} </h5>
-          <p class="card-text">{{$course->description}}</p>
+          <p class="card-text">{{ \Illuminate\Support\Str::words($course->description, 3, '...') }}<a href="/courses/{{$course->id}}" style="text-decoration: none;" class="learn-more"> Learn More</a></p>
         </div>
         <div class="card-footer">
           <small class="text-body-secondary"> last update {{$course->timeDifference}} </small>
@@ -359,7 +348,8 @@
   </div>
 </div>
 </section>
-    <h1>Most Rating Courses</h1>
+
+    <h1 style="margin-left: 30px; color:darkgoldenrod">Most Rating Courses</h1>
 
   <section class="section-container">
 
@@ -375,11 +365,18 @@
         @foreach ($courses as $course)
         @if($course->rataing>=0)
             
-        <div class="product-card">
+        <div href="" class="product-card">
           {{-- <div class="new-badge">New</div> --}}
-          <img src="images/bg-img.jpg" alt="">
+          @if ($course->image)
+          
+          <img src="{{ asset('storage/' . $course->image) }}" style="height: 80%" class="card-img-top" alt="{{ $course->name }}">
+         @else
+         <img src="images/bg-img.jpg" style="height: 80%" class="card-img-top" alt="{{ $course->name }}">
+  
+          @endif          
           <h3>{{$course->name}}</h3>
-          <p>{{$course->decription}}</p>
+          <p>{{ \Illuminate\Support\Str::words($course->description,3, '...') }} <a href="/courses/{{$course->id}}" style="text-decoration: none;" class="learn-more">Learn More</a></p>
+
         </div>
       @endif
                 @endforeach
@@ -479,6 +476,9 @@
 </div>
   --}}
   </section>
+  
+
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
   const scrollBtns = document.querySelectorAll(".scroll-btn");

@@ -21,6 +21,11 @@ background: radial-gradient(circle, rgba(238,174,202,1) 42%, rgba(148,187,233,1)
     {{ session('message') }}
 </div> 
 @endif
+@if(@session('succes'))
+<div class="alert alert-success">
+    {{ session('succes') }}
+</div> 
+@endif
 @foreach ($courses as $course)
 @if(!$course->approved)
 <div class="course-rectangle">

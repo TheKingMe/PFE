@@ -2,7 +2,13 @@
 @section('content')
 
 <link rel="stylesheet" href="css/Cards-courses.css">
+
 <div class="container">
+  @if (session('erreur'))
+<div class="alert alert-success">
+    {{ session('erreur') }}
+</div>
+@endif 
   <h2 class="container-heading">All Courses</h2>
   @if(Auth::check() && Auth::user()->role == 'teacher')
 <button id="openModalButton" type="button" class="btn btn-primary">Add Course</button>
@@ -60,8 +66,9 @@
                     $tags=$course['tags'];
                     $tags=explode(',', $course->tags);
                     @endphp
-
-            <a href="/courses/{{$course['id']}}" class="card-item">
+            
+            <a href="{{route('courses.show',['id'=>$course->id])}}" class="card-item">
+           
            
             @if($course->image)
     <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->name }}" class="img-fluid">
@@ -88,24 +95,16 @@
                 </div>
             </a>
                     @endforeach
-                    <a href="#" class="card-item">
-                        <img src="images/developer.jpg" alt="Card Image">
-                        <span class="developer">Developer</span>
-                        <h3>A "developer" codes software and websites.</h3>
-                        <div class="arrow">
-                            <i class="fas fa-arrow-right card-icon"></i>
-                        </div>
-                    </a> <a href="#" class="card-item">
-                        <img src="images/developer.jpg" alt="Card Image">
-                        <span class="developer">Developer</span>
-                        <h3>A "developer" codes software and websites.</h3>
-                        <div class="arrow">
-                            <i class="fas fa-arrow-right card-icon"></i>
-                        </div>
-                    </a>
+                   
+    </div>
+    <div  class="d-flex justify-content-center">
+      {{ $courses->links('vendor.pagination.bootstrap-4') }}
     </div>
   
 </div>
+
+
+ 
 @endsection
 
 
