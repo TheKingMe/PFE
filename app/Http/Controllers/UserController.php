@@ -41,7 +41,7 @@ class UserController extends Controller
 
         // Redirect the user somewhere after successful submission
 
-     return redirect('/accueil')->with('success', 'User created successfully!');
+     return redirect('/login')->with('success', 'User created successfully!');
     }catch(ValidationException $e){
         return redirect()->back()->withErrors($e->validator->errors())->withInput();
 }

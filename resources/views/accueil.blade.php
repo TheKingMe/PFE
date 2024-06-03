@@ -499,7 +499,7 @@
 
   </script>
 
-@endsection
+  @endsection
 {{-- arrow ScroLL IN CARDS rating --}}
 <script>
   document.addEventListener("DOMContentLoaded", function() {

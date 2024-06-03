@@ -23,7 +23,7 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="margin:0;">
         <div class="container-fluid">
-          <a class="navbar-brand" href="{{route('accueil')}}">KA3KA3</a>
+          <a class="navbar-brand" href="{{route('accueil')}}">U-course</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -43,9 +43,13 @@
                       
                   <li><a class="dropdown-item" href="{{route('welcome')}}">My courses</a></li>
                   @endif
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  @if(auth()->user()->role=='B-admin')
+                  <li><a class="dropdown-item" href="{{route('AddAdmin')}}">Add admin</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                
+                  <li><a class="dropdown-item" href="{{route('AdminList')}}">Admin list</a></li>
+                   @endif
+
                 </ul>
               </li>
               <li>
@@ -77,6 +81,7 @@
 @yield('content')
 
 <link rel="stylesheet" href="{{asset('css/footer.css')}}" >
+
 <footer class="footer_area section_padding_130_0">
       <div class="container">
         <div class="row">
@@ -146,6 +151,7 @@
         </div>
       </div>
     </footer>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"> </scipt>
 </body>
 </html>

@@ -16,6 +16,10 @@ use App\Http\Controllers\testController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\quizcontroller;
 use App\Http\Controllers\paymentController;
+use App\Http\Controllers\addAdmincontroller;
+use App\Http\Controllers\FilePdfController;
+
+
  
 use App\Models\SectionContents;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -36,6 +40,17 @@ Route::get('/courses/add/{course_id}', [SectionController::class, 'create'])->na
 Route::get('/courses/tag/{tag}', [CourseController::class,'tags'])->name('courses.tag');
 Route::post('/courses/add',[sectionController::class,'store'])->name('Add.store')->middleware('verified');
 Route::post('/courses/add/{course_id}/swap', [sectionController::class, 'changeOrderRange'])->name('change_order_range');
+
+Route::get('/courses/add/{course_id}?', [SectionController::class, 'index'])->name('sections.index');
+Route::delete('/content/{id}', [SectionContentController::class, 'destroy'])->name('content.delete');
+
+//Add admin
+Route::get('/AddAdmin',[addAdmincontroller::class,'index'])->name('AddAdmin');
+Route::post('/AddAdmin',[addAdmincontroller::class,'store'])->name('AddAdmin.store');
+//list Admin
+Route::get('/AdminList',[addAdmincontroller::class,'show'])->name('AdminList');
+Route::delete('/AdminList/{id}', 'App\Http\Controllers\addAdmincontroller@delete')->name('Admin.delete');
+
 
 Route::post('/courses/add/{course_id}',[SectionContentController::class,'store'])->name('content.store')->middleware('verified');;
 // Route::get('/courses/add/{course_id}',[SectionContentController::class,'index'])->name('content.index');
@@ -87,7 +102,9 @@ Route::get('courses/add/{id}', function ($id) {
         // Handle video not found scenario
     }
 })->name('video.show')->middleware('verified');;
-
+//pdf denerated
+Route::get('/create-certificate-template/{id}', [FilePdfController::class, 'createCertificateTemplate'])->name('certicate.create');
+Route::get('/pdf/{id}',[FilePdfController::class,'process']);
 
 
 //Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');

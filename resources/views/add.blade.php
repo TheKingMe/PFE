@@ -5,10 +5,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="./css/Style.css">
 <style>
-
-
-
-
 /*delete button here*/
 
 .button-delete {
@@ -266,9 +262,7 @@
     color: #333; /* dark gray color */
 }
 
-</style>
 
-<style>
 
   .container-button {
           max-width: 100%;
@@ -345,9 +339,7 @@
   .section.expanded .section-content {
       display: block; /* Display when expanded */
   }
-  </style>
-
-<style>
+  
   
     .button-update {
     background-color: #4CAF50; /* Green color */
@@ -380,15 +372,9 @@
     cursor: pointer;
     border-radius: 4px; /* Rounded corners */
   }
-  
   .button-edit:hover {
     background-color: royalblue; /* Green hover color */
   }
-  
-  
- 
-  
-  
     .dashboard {
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -404,6 +390,7 @@
   
   th,
   td {
+    
     text-align: left;
     padding: 8px;
     border: 1px solid #ddd;
@@ -427,17 +414,19 @@
     width: 20%; /* adjust as needed */
   }
   
-  a {
-    color: #333;
+  .B-a {
+    color: royalblue;
     text-decoration: none;
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin: 5px;
+    padding: 5px;
+    border-radius: 10px;
+    margin-right: 5px;
+    margin-bottom:20px; 
   }
   
-  a:hover {
+  .B-a:hover {
     background-color: #eee;
+        border: 1px solid #ddd;
+
   }
   
   
@@ -596,7 +585,7 @@
     top: 50%; /* Center the modal vertically */
     left: 50%; /* Center the modal horizontally */
     width: 50%;
-    height: 76%;
+    height: 70%;
     transform: translate(-50%, -50%); /* Center the modal precisely */
     background-color: #f9f9f9; /* Background color */
     border: 1px solid #ccc; /* Border */
@@ -614,9 +603,11 @@
 }
 
 .closee {
+  display: relative;
     cursor: pointer; /* Change cursor to pointer */
-    font-size: 20px; /* Set font size */
+    font-size: 40px; /* Set font size */
     align-self: flex-end; /* Align the close button to the end */
+    margin-right: 20px;
 }
 
 .closee:hover {
@@ -636,9 +627,7 @@
     color: #495057; /* Close button color */
 }
 
-.closee:hover {
-    color: #007bff; /* Close button color on hover */
-}
+
 
 label {
     font-weight: bold; /* Make labels bold */
@@ -687,9 +676,16 @@ button[type="submit"]:hover {
 }
 
 
-</style>
 
-<section class="container" style="height: 93vh">
+
+
+
+       
+      
+        
+</style>
+<body>
+<section class="container" style="height:100%">
 
 {{-- <select id="myselect" class="form-select form-select-sm" aria-label="Default select example">
   <option selected disabled>Add Content</option>
@@ -699,7 +695,6 @@ button[type="submit"]:hover {
 
 <div class="container-button" style="height:10vh" >
     <input type="button" id="addSectionBtn" class="button-update" style="margin-right: 10px" value="Add Section">
-    <input type="button" class="button-edit" value="Add Quiz">
 </div>
 <div class="bg-gray-900">
     <div class="container mx-auto p-6 flex items-center justify-between ">
@@ -709,11 +704,11 @@ button[type="submit"]:hover {
   </div> 
   <form id="changeOrderForm" method="POST" action="{{ route('change_order_range', ['course_id' => $course_id]) }}" enctype="multipart/form-data" novalidate>
     @csrf
-    <label for="startOrder">Start Order:</label>
-    <input type="number" id="startOrder" name="startOrder" required>
-    <label for="endOrder">End Order:</label>
-    <input type="number" id="endOrder" name="endOrder" required>
-    <button type="submit">Change Order</button>
+    <label for="startOrder">section order:</label>
+    <input type="number" id="startOrder" min="1" name="startOrder" required>
+    <label for="endOrder">section order</label>
+    <input type="number" id="endOrder" min="1" name="endOrder" required>
+    <button type="submit" style="color:black;" >Change Order</button>
 </form>
 @if (session('success_change_order'))
     <div class="alert alert-success">
@@ -733,22 +728,22 @@ button[type="submit"]:hover {
 @endif
 
 <div id="myModal" class="modall">
-    <form method="POST" action="{{route('Add.store')}}" class="modal-content" enctype="multipart/form-data" >
+    <form method="POST" action="{{route('Add.store')}}" style="display: flex;flex-direction: column;" enctype="multipart/form-data" >
         @csrf
         
-        <span class="closee" id="spanid">&times;</span> <!-- Close button at the end -->
+        <span class="closee" id="spanid" >&times;</span> <!-- Close button at the end -->
+        <div  style="height: 100%;display:flex;flex-direction:column;justify-content: center;padding:50px;padding-top:10px;" >
         <label for="nameInput">Name:</label>
-        <input type="text" id="nameInput" name="name">
+        <input type="text" id="nameInput" style="max-width: 90%" name="name">
         <br>
         <label for="descriptionInput">Description:</label>
-        <textarea id="descriptionInput" name="description"></textarea>
+        <textarea id="descriptionInput" style="max-width: 90%" name="description"></textarea>
         <br>
         <input type="hidden" name="course_id" value="{{ $course_id }}">
-        <label for="courseSelect">Select Course:</label>
-
 <br>
-            <button type="submit" value="enter"  id="submitBtn">ADD</button>
-    </form>
+            <button type="submit" value="enter" style="max-width: 90%;background-color: royalblue"  id="submitBtn">ADD</button>
+   </div>
+  </form>
 </div> 
 <script>
   function validateFile() {
@@ -818,104 +813,126 @@ button[type="submit"]:hover {
 </div>
 
 
-    <div class="container mx-auto p-6 ">
-
-        <table id="dataTable" class="w-full whitespace-no-wrap bg-white overflow-hidden table-striped">
-          <thead>
-            <tr>
-              <th>order</th>
-              <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="name">Name</th>
-              <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="content">Content</th>
-              {{-- <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="status">Status</th> --}}
-              <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs">Actions 
-                <select name='vedio_pdf' id="vedio_pdf"  onchange="toggleFileUpload()">
-                  <option value="1">Video</option>
-                  <option value="2">PDF</option>
-              </select>
-              </th>
-            </tr>
-          </thead>
-          <tbody id="sections-container" >
+    <div class="container mx-auto  p-6 " style="margin-top:15px;">
+<div class="table-wrapper" >
+          <table id="dataTable" class="w-full whitespace-no-wrap bg-white overflow-hidden table-striped">
+            <thead>
+              <tr>
+                <th>order</th>
+                <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="name">Name</th>
+                <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="content">Content</th>
+                {{-- <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs" data-field="status">Status</th> --}}
+                <th class="px-6 py-3 text-gray-500 font-bold tracking-wider uppercase text-xs">Actions 
+                  <select name='vedio_pdf' id="vedio_pdf"  onchange="toggleFileUpload()">
+                    <option value="1">Video</option>
+                    <option value="2">PDF</option>
+                </select>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="sections-container" >
+              
+              
+              </script>
+        @foreach ($sections->sortBy('order') as $section)
             
-             
-             </script>
-      @foreach ($section->sortBy('order') as $sections)
+            @if($section->course_id==$course_id)
+            <tr >
+              <td data-id="{{ $section->id }}" >{{$section->order}}</td>
+            <td><a>{{$section->name}}</a></td>
           
-          @if($sections->course_id==$course_id)
-          <tr >
-            <td data-id="{{ $sections->id }}" >{{$sections->order}}</td>
-          <td><a>{{$sections->name}}</a></td>
-         
-                
-          <td>
-            @foreach ($sectionContents as $Sc)
-            @if ($Sc->section_id == $sections->id)
-                <?php
-                $videoId = 'video_' . $Sc->id; // Unique ID for each video
-                $pdfId = 'pdf_' . $Sc->id;
-                $f_p = null; // Initialize with null to avoid potential errors
-                $files = glob('storage/' . $Sc->file_path . '/*');
-        
-                if (count($files) === 1) {
-                    $f_p = $files[0];
-                }
-                ?>
-                <a href="#" id="{{ $videoId }}" onclick="showVideo('{{ $videoId }}');" class="video-link">{{ $Sc->file_name }}</a><br>
-                <div id="videoContainer_{{ $Sc->id }}" class="videoContainer" style="display: none;">
-                    <video id="videoPlayer_{{ $Sc->id }}" width="500" height="500" controls >
-                        <source src="{{ asset($f_p) }}" type="video/mp4">
-                    </video>
-                </div>
-            @endif
-        @endforeach
-        
-          </td>
-                        
+                  
+            <td>
+              @foreach ($sectionContents as $Sc)
+              @if ($Sc->section_id == $section->id)
+                  <?php
+                  $videoId = 'video_' . $Sc->id; // Unique ID for each video
+                  $pdfId = 'pdf_' . $Sc->id;
+                  $f_p = null; // Initialize with null to avoid potential errors
+                  $files = glob('storage/' . $Sc->file_path . '/*');
+          
+                  if (count($files) === 1) {
+                      $f_p = $files[0];
+                  }
+                  ?>
+                  {{-- <a href="#"  id="{{ $videoId }}" onclick="showVideo('{{ $videoId }}');" class="B-a video-link">{{ $Sc->file_name }}</a><br> --}}
+                  @if ($Sc->file_type === 'mp4')
+                             <a href="#" id="{{ $videoId }}" onclick="showVideo('{{ $videoId }}');" class="B-a video-link">{{ $Sc->file_name }}</a>
+                  @elseif ($Sc->file_type === 'pdf')
+                              <a href="#" id="{{ $pdfId }}" onclick="showPDF('{{ $pdfId }}');" class="B-a pdf-link">{{ $Sc->file_name }}</a>
+                  @endif
+                  <form method="POST" action="{{ route('content.delete', ['id' => $Sc->id]) }}" >
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="button-delete">Delete</button>
+                </form>
 
-          <td>
-            {{--<a href="#" class="button-edit">Edit</a>
-             <a href="#" class="button-update">Update</a>
-             <a href="#" class="button-delete">Delete</a>--}}
-      
-             <input type="button" id="editSectionNam" class="button-update" style="margin-right: 10px" onclick="document.getElementById('modal2').style.display='block';let section_id = {{$sections->id}}; document.getElementById('sectionIdInput').value = section_id; document.getElementById('Pdf_id').value = section_id;" value="Add Content">
-             <form method="POST" action="{{ route('section.delete', ['id' => $sections->id]) }}">
-              @csrf
-              @method('DELETE')
-              <button class="button-delete" type="submit" onclick="Delete_click();">
-                <div class="icon">
-                    <svg class="top">
-                        <use xlink:href="#top">
-                    </svg>
-                    <svg class="bottom">
-                        <use xlink:href="#bottom">
-                    </svg>
+                  <div id="videoContainer_{{ $Sc->id }}" class="videoContainer" style="display: none;">
+                      <video id="videoPlayer_{{ $Sc->id }}" width="750" height="750" controls >
+                          <source src="{{ asset($f_p) }}" type="video/mp4">
+                      </video>
+                  </div>
+                  <div id="pdfContainer_{{ $Sc->id }}" class="videoContainer" style="display: none;">
+                    <!-- Embed PDF viewer here -->
+                    <object data="{{ asset($f_p) }}" type="application/pdf" width="900" height="600">
+                        <p>Alternative content for users without PDF plugin</p>
+                    </object>
                 </div>
-                <span>Delete</span>
-            </button>
-            
-            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="top">
-                    <path d="M15,4 C15.5522847,4 16,4.44771525 16,5 L16,6 L18.25,6 C18.6642136,6 19,6.33578644 19,6.75 C19,7.16421356 18.6642136,7.5 18.25,7.5 L5.75,7.5 C5.33578644,7.5 5,7.16421356 5,6.75 C5,6.33578644 5.33578644,6 5.75,6 L8,6 L8,5 C8,4.44771525 8.44771525,4 9,4 L15,4 Z M14,5.25 L10,5.25 C9.72385763,5.25 9.5,5.47385763 9.5,5.75 C9.5,5.99545989 9.67687516,6.19960837 9.91012437,6.24194433 L10,6.25 L14,6.25 C14.2761424,6.25 14.5,6.02614237 14.5,5.75 C14.5,5.50454011 14.3231248,5.30039163 14.0898756,5.25805567 L14,5.25 Z"></path>
-                </symbol>
-                <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="bottom">
-                    <path d="M16.9535129,8 C17.4663488,8 17.8890201,8.38604019 17.9467852,8.88337887 L17.953255,9.02270969 L17.953255,9.02270969 L17.5309272,18.3196017 C17.5119599,18.7374363 17.2349366,19.0993109 16.8365446,19.2267053 C15.2243631,19.7422351 13.6121815,20 12,20 C10.3878264,20 8.77565288,19.7422377 7.16347932,19.226713 C6.76508717,19.0993333 6.48806648,18.7374627 6.46907425,18.3196335 L6.04751853,9.04540766 C6.02423185,8.53310079 6.39068134,8.09333626 6.88488406,8.01304774 L7.02377738,8.0002579 L16.9535129,8 Z M9.75,10.5 C9.37030423,10.5 9.05650904,10.719453 9.00684662,11.0041785 L9,11.0833333 L9,16.9166667 C9,17.2388328 9.33578644,17.5 9.75,17.5 C10.1296958,17.5 10.443491,17.280547 10.4931534,16.9958215 L10.5,16.9166667 L10.5,11.0833333 C10.5,10.7611672 10.1642136,10.5 9.75,10.5 Z M14.25,10.5 C13.8703042,10.5 13.556509,10.719453 13.5068466,11.0041785 L13.5,11.0833333 L13.5,16.9166667 C13.5,17.2388328 13.8357864,17.5 14.25,17.5 C14.6296958,17.5 14.943491,17.280547 14.9931534,16.9958215 L15,16.9166667 L15,11.0833333 C15,10.7611672 14.6642136,10.5 14.25,10.5 Z"></path>
-                </symbol>
-            </svg>
-          </form>
-             {{-- <select name='vedio_pdf' id="vedio_pdf_{{$sections->id}}"  onchange="toggleFileUpload({{$sections->id}})">
-              <option value="1">Video</option>
-              <option value="2">PDF</option>
-          </select> --}}
-          </td>
-        
-        </tr>
-        @endif
-        
+               
+              @endif
           @endforeach
+          
+            </td>
+                          
+
+            <td>
+              {{--<a href="#" class="button-edit">Edit</a>
+              <a href="#" class="button-update">Update</a>
+              <a href="#" class="button-delete">Delete</a>--}}
+        
+              <input type="button" id="editSectionNam" class="button-update" style="margin-right: 10px" onclick="document.getElementById('modal2').style.display='block';let section_id = {{$section->id}}; document.getElementById('sectionIdInput').value = section_id; document.getElementById('Pdf_id').value = section_id;" value="Add Content">
+              <form method="POST" action="{{ route('section.delete', ['id' => $section->id]) }}">
+                @csrf
+                @method('DELETE')
+                <button class="button-delete" type="submit" onclick="Delete_click();">
+                  <div class="icon">
+                      <svg class="top">
+                          <use xlink:href="#top">
+                      </svg>
+                      <svg class="bottom">
+                          <use xlink:href="#bottom">
+                      </svg>
+                  </div>
+                  <span>Delete</span>
+              </button>
+              
+              <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="top">
+                      <path d="M15,4 C15.5522847,4 16,4.44771525 16,5 L16,6 L18.25,6 C18.6642136,6 19,6.33578644 19,6.75 C19,7.16421356 18.6642136,7.5 18.25,7.5 L5.75,7.5 C5.33578644,7.5 5,7.16421356 5,6.75 C5,6.33578644 5.33578644,6 5.75,6 L8,6 L8,5 C8,4.44771525 8.44771525,4 9,4 L15,4 Z M14,5.25 L10,5.25 C9.72385763,5.25 9.5,5.47385763 9.5,5.75 C9.5,5.99545989 9.67687516,6.19960837 9.91012437,6.24194433 L10,6.25 L14,6.25 C14.2761424,6.25 14.5,6.02614237 14.5,5.75 C14.5,5.50454011 14.3231248,5.30039163 14.0898756,5.25805567 L14,5.25 Z"></path>
+                  </symbol>
+                  <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="bottom">
+                      <path d="M16.9535129,8 C17.4663488,8 17.8890201,8.38604019 17.9467852,8.88337887 L17.953255,9.02270969 L17.953255,9.02270969 L17.5309272,18.3196017 C17.5119599,18.7374363 17.2349366,19.0993109 16.8365446,19.2267053 C15.2243631,19.7422351 13.6121815,20 12,20 C10.3878264,20 8.77565288,19.7422377 7.16347932,19.226713 C6.76508717,19.0993333 6.48806648,18.7374627 6.46907425,18.3196335 L6.04751853,9.04540766 C6.02423185,8.53310079 6.39068134,8.09333626 6.88488406,8.01304774 L7.02377738,8.0002579 L16.9535129,8 Z M9.75,10.5 C9.37030423,10.5 9.05650904,10.719453 9.00684662,11.0041785 L9,11.0833333 L9,16.9166667 C9,17.2388328 9.33578644,17.5 9.75,17.5 C10.1296958,17.5 10.443491,17.280547 10.4931534,16.9958215 L10.5,16.9166667 L10.5,11.0833333 C10.5,10.7611672 10.1642136,10.5 9.75,10.5 Z M14.25,10.5 C13.8703042,10.5 13.556509,10.719453 13.5068466,11.0041785 L13.5,11.0833333 L13.5,16.9166667 C13.5,17.2388328 13.8357864,17.5 14.25,17.5 C14.6296958,17.5 14.943491,17.280547 14.9931534,16.9958215 L15,16.9166667 L15,11.0833333 C15,10.7611672 14.6642136,10.5 14.25,10.5 Z"></path>
+                  </symbol>
+              </svg>
+            </form>
+              {{-- <select name='vedio_pdf' id="vedio_pdf_{{$sections->id}}"  onchange="toggleFileUpload({{$sections->id}})">
+                <option value="1">Video</option>
+                <option value="2">PDF</option>
+            </select> --}}
+            </td>
+          
+          </tr>
+          @endif
+          
+            @endforeach
             {{-- add section here --}}
           </tbody>
         </table>
       </div>
+      <div style="width: 100%;display:flex;justify-content: center;margin-top:20px;">
+        {{ $sections->links('vendor.pagination.bootstrap-4') }}
+      </div>
+        </div>
      
 
       
@@ -929,6 +946,8 @@ button[type="submit"]:hover {
     <button class="add-btn">Add</button>
     <div class="added-content"></div> --}}
 </section>
+</body>
+
 {{-- button delete script --}}
 <script>
   Delete_click(){
@@ -969,7 +988,15 @@ function showVideo(videoId) {
         videoContainer.style.display = 'none';
     }
 }
-
+function showPDF(pdfId) {
+    var pdfContainerId = 'pdfContainer_' + pdfId.split('_')[1];
+    var pdfContainer = document.getElementById(pdfContainerId);
+    if (pdfContainer.style.display === 'none') {
+        pdfContainer.style.display = 'block';
+    } else {
+        pdfContainer.style.display = 'none';
+    }
+}
 // window.addEventListener('click', function(event) {
 //     var videoContainers = document.querySelectorAll('[id^="videoContainer_"]');
 //     var videoLinks = document.querySelectorAll('[id^="video_"]');
@@ -1017,6 +1044,15 @@ window.addEventListener('click', function(event) {
     });
 });
 
+window.addEventListener('click', function(event) {
+    var pdfContainers = document.querySelectorAll('[id^="pdfContainer_"]');
+    var pdfLinks = document.querySelectorAll('[id^="pdf_"]');
+    pdfContainers.forEach(function(pdfContainer) {
+        if (event.target !== pdfContainer && !Array.from(pdfLinks).includes(event.target)) {
+            pdfContainer.style.display = 'none';
+        }
+    });
+});
 // Function to check if content is added
 function isContentAdded() {
     // Add your logic here to check if content is added
@@ -1202,9 +1238,11 @@ submitBtn.addEventListener("click", function() {
 }
   </script>
   <!-- Button to open the modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createQuizModal">
+  <div style="width: 100%;justify-content: center;display:flex;" >
+<button type="button" class="btn btn-primary" style="margin: 20px;" data-bs-toggle="modal" data-bs-target="#createQuizModal">
   Add Quiz
 </button>
+</div>
 
 <!-- Modal for creating a quiz -->
 <div class="modal fade" id="createQuizModal" tabindex="-1" aria-labelledby="createQuizModalLabel" aria-hidden="true">

@@ -11,16 +11,29 @@ use Illuminate\Support\Facades\DB;
 class SectionController extends Controller
 {
     
-       
-       
+    public function index($course_id)
+    {
+        $sections = Section::where('course_id', $course_id)
+                           ->orderBy('order')
+                           ->paginate(4); // Adjust the number of items per page as needed
+    
+        $sectionIds = $sections->pluck('id');
+    
+        $sectionContents = SectionContents::whereIn('section_id', $sectionIds)->get();
+    
+        return view('sections.index', compact('sections', 'sectionContents', 'course_id'));
+    }
+     
         public function create($course_id) {
             $sectioncontents = SectionContents::all();
-            $sections = Section::all(); // Retrieve sections from the database or wherever they come from
-            $videoContent = SectionContents::find($course_id);
+            $sections = Section::where('course_id', $course_id)
+            ->orderBy('order')
+            ->paginate(4); 
+                        $videoContent = SectionContents::find($course_id);
 
               
          
-            return view('add')->with('section', $sections)->with('course_id', $course_id)->with('sectionContents', $sectioncontents);
+            return view('add')->with('sections', $sections)->with('course_id', $course_id)->with('sectionContents', $sectioncontents);
         }
 
         // public function store(Request $request){
@@ -92,10 +105,6 @@ class SectionController extends Controller
         $startOrder = $request->input('startOrder');
         $endOrder = $request->input('endOrder');
     
-        // Validate the inputs
-        if ($startOrder > $endOrder) {
-            return redirect()->back()->withErrors(['Invalid order range.']);
-        }
     
         // Fetch the section at the start of the range
         $startSection = Section::where('course_id', $course_id)

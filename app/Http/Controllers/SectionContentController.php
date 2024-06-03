@@ -57,6 +57,23 @@ class SectionContentController extends Controller
         $sectionContent->save();
         return redirect()->back();
     }
+
+    public function destroy($id)
+    {
+        $content = SectionContents::find($id);
+
+        if ($content) {
+            // Delete the file from storage
+            Storage::delete($content->file_path);
+
+            // Delete the content record from the database
+            $content->delete();
+
+            return redirect()->back()->with('success', 'Content deleted successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Content not found.');
+    }
     
     
 }

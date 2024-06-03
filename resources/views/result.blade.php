@@ -6,6 +6,6 @@
 @if($result < 50)
 <a href="/courses/{{$course['id']}}/test">repass the test</a>
 @else
-<a>get your certificat</a>
+<a href="{{route('certicate.create',['id'=>$user->id])}}" >get your certificat</a>
 @endif
 @endsection

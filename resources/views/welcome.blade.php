@@ -72,7 +72,7 @@
               </p>
           </div>
           <div class="info p-15 p-relative between-flex" style="background-color: #f2efeff8">
-              <span class="title bg-blue c-white btn-shape"><a href="/courses/add/{{$course->id}}" style="text-decoration: none;color:black;" >Course contents</a></span>
+              <span class="title bg-blue c-white btn-shape"><a href="{{route('sections.index',['course_id' => $course->id])}}" style="text-decoration: none;color:black;" >Course contents</a></span>
               <span class="c-grey">
                   <i class="fa-regular fa-user"></i>
                   950
