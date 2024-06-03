@@ -32,7 +32,7 @@ class TestController extends Controller
             'answers' => 'required|array',
             'answers.*' => 'required|exists:options,id',
         ]);
-      
+        $user_id=$data['user_id'];
         $user = User::findOrFail($data['user_id']);
         $course = Course::findOrFail($data['course_id']);
         $quiz = Quiz::findOrFail($data['quiz_id']);
@@ -76,7 +76,7 @@ quizresult::create([
 
 
 
-        return redirect()->route('test.result', ['id' => $course->id])->with('result', $result);
+        return redirect()->route('test.result', ['id' => $course->id],)->with('result', $result)->with('user_id',$user_id);
     }
 
     public function  result($course_id){

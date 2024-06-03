@@ -7,13 +7,18 @@ use Illuminate\Http\Request;
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\PdfReader;
 use Fpdf\Fpdf;
+use App\Models\Course;
+
 class FilePdfController extends Controller
 {
 
-    public function createCertificateTemplate($id)
+    public function createCertificateTemplate($course_id,$id)
     {
         $templatePath = public_path('master/dcc.pdf');
+        $name=auth()->user()->name;
+        $id=auth()->user()->id;
 
+        $course = Course::find($course_id); 
         // Ensure the directory exists
         if (!file_exists(public_path('master'))) {
             mkdir(public_path('master'), 0777, true);
@@ -28,23 +33,23 @@ class FilePdfController extends Controller
         $pdf->Cell(0, 10, 'This is to certify that', 0, 1, 'C');
         $pdf->Ln(10);
         $pdf->SetFont('Arial', 'I', 14);
-        $pdf->Cell(0, 10, '____________________', 0, 1, 'C');
+        $pdf->Cell(0, 10, $name, 0, 1, 'C');
         $pdf->Ln(10);
         $pdf->SetFont('Arial', '', 12);
         $pdf->Cell(0, 10, 'has successfully completed the course', 0, 1, 'C');
         $pdf->Ln(10);
-        $pdf->Cell(0, 10, 'Course Name', 0, 1, 'C');
+        $pdf->Cell(0, 10, $course->name, 0, 1, 'C');
         $pdf->Ln(20);
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(0, 10, 'Signature', 0, 0, 'L');
         $pdf->Cell(0, 10, 'Date', 0, 0, 'R');
         $pdf->Output(public_path('master/dcc.pdf'), 'F');
 
-        return view('pdf',compact('id'));
+        return redirect()->route('get-certificate', ['id' => $id,'course_id'=>$course_id]);
     }
     public function process(Request $request)
     {
-        $name = "test";
+        $name = "";
         $outputfile = public_path().'dcc.pdf';
         $this->fillPDF(public_path().'/master/dcc.pdf',$outputfile,$name);
         

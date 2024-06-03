@@ -103,8 +103,8 @@ Route::get('courses/add/{id}', function ($id) {
     }
 })->name('video.show')->middleware('verified');;
 //pdf denerated
-Route::get('/create-certificate-template/{id}', [FilePdfController::class, 'createCertificateTemplate'])->name('certicate.create');
-Route::get('/pdf/{id}',[FilePdfController::class,'process']);
+Route::get('/create-certificate-template/{course_id}/{id}', [FilePdfController::class, 'createCertificateTemplate'])->name('certicate.create');
+Route::get('/get-certificate/{course_id}/{id}', [FilePdfController::class, 'process'])->name('get-certificate');
 
 
 //Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
