@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
+
 
 class welcomeController extends Controller
 {
 
     public function index()
     {
+        if (!Auth::check()) {
+            // Redirect to 'accueil' if not authenticated
+            return view('login');
+        }
         // Get the authenticated user
         $user = auth()->user();
 

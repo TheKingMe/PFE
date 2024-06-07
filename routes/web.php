@@ -26,12 +26,14 @@ use App\Http\Controllers\FilePdfController;
 use App\Models\SectionContents;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
-// // Authentication Routes...
-// require __DIR__.'/auth.php';
 
-// // Email Verification Routes...
-// require __DIR__.'/email_verification.php';
-//payment route
+
+Route::get('/',function(){
+
+return redirect('accueil');
+});
+
+
 Route::get('/courses/payment/{id}',[paymentController::class,'index'])->name('payment.index');
 Route::post('/courses/payment/{id}/store', [PaymentController::class,'store'])->name('payment.store');
 
@@ -54,10 +56,10 @@ Route::get('/AdminList',[addAdmincontroller::class,'show'])->name('AdminList');
 Route::delete('/AdminList/{id}', 'App\Http\Controllers\addAdmincontroller@delete')->name('Admin.delete');
 
 
-Route::post('/courses/add/{course_id}',[SectionContentController::class,'store'])->name('content.store')->middleware('verified');;
+Route::post('/courses/add/{course_id}',[SectionContentController::class,'store'])->name('content.store')->middleware('verified');
 // Route::get('/courses/add/{course_id}',[SectionContentController::class,'index'])->name('content.index');
-Route::delete('/courses/add/{id}', 'App\Http\Controllers\SectionController@delete')->name('section.delete')->middleware('verified');;
-Route::get('/welcome', [welcomeController::class, 'index'])->name('welcome')->middleware('verified');;
+Route::delete('/courses/add/{id}', 'App\Http\Controllers\SectionController@delete')->name('section.delete')->middleware('verified');
+Route::get('/welcome', [welcomeController::class, 'index'])->name('welcome')->middleware('verified');
 
 // Route for showing the course creation form
 Route::get('/courses', [CourseController::class, 'create'])->name('courses.create');

@@ -1,8 +1,7 @@
 @extends('layout')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/Style.css') }}">
-<link rel="stylesheet" href="{{ asset('css/framework.css') }}">
-<link rel="stylesheet" href="{{asset('css/all.min.css')}}">
+
 <link rel="stylesheet" href="{{asset('css/welcomepage.css')}}">
 
 <div class="container" style="margin-left: 0px;">

@@ -176,13 +176,17 @@ $f_p = $files[0];
            @else
            @if(!(auth::user()->isenrolled($course->id)))
            <br>
-           <span style="color: rgb(140, 0, 255)" > Enroll For all Sections.</span>
+           <form action="{{ route('courses.enroll',['id'=>$course->id])}}" method="POST"> 
+            @csrf <!-- CSRF protection --> 
   
+            <input type="hidden" name="course_id" value="{{ $course->id }}">
+          
+            <button type="submit" style=" background-color:white;color:rgb(140, 0, 255);border-style:none;" >Enroll For all Sections.</button>
+  </form>  
            @break
            @endif
            @endif
-
-        
+           
           </div>
 
         </div>
@@ -194,7 +198,7 @@ $f_p = $files[0];
 
 @endforeach 
 @if(auth::check() && auth::user()->isenrolled($course->id))
-<a href="/courses/{{$course['id']}}/test" style="width: 15%;margin:10px;" >pass the test</a>
+<a href="/courses/{{$course['id']}}/test" class="btn btn-primary" style="width: 15%;margin:10px;" >pass the test</a>
 @endif
 @if(Auth::check() && Auth::user()->name==$course->teacher)
 <a href="/courses/add/{{$course['id']}}" class="btn btn-primary" style="width: 15%;margin:10px;" role="button">update course</a>

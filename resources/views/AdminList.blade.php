@@ -3,10 +3,14 @@
 @section('content')
 <?php
 
+
+   
+
 if( Auth::check() && auth()->user()->role!='B-admin')
 {
     return view('accueil');
 }
+
 
 ?>
 @if(@session('succes'))

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash; // Import the Hash facade
 use App\Models\User; // Import the User model
+use App\Models\course; // Import the User model
 use Illuminate\Validation\Rule; 
 use Illuminate\Validation\ValidationException;// Import Rule class
 use Illuminate\Auth\Events\Registered; // Import the Registered event class
@@ -16,6 +17,11 @@ class addAdmincontroller extends Controller
 {
     public function index()
     {
+        if (!(Auth::check())) {
+            // Redirect to 'accueil' if not authenticated
+            return view('login');
+        }
+
         return view('AddAdmin');
     }
 
@@ -51,7 +57,12 @@ class addAdmincontroller extends Controller
     }
 
 public function show()
-{
+{     if (!(Auth::check())) {
+    // Redirect to 'accueil' if not authenticated
+    return view('login');
+}
+
+
     $users = User::where('role', 'admin')->paginate(7); // Display 10 admins per page
     return view('AdminList',compact('users') );
 }

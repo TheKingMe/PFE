@@ -64,7 +64,7 @@
 @endphp
     <div class="card-list">
                  @foreach ($courses as $course)
-                 @if($course->approved==1)
+                 @if($course->approved==0)
                 @continue;
                 @endif
                     @php
