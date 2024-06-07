@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\course;
 
 class paymentController extends Controller
 {
     public function index($id)
-    {
+    {   $course = course::findOrFail($id);
         $user = auth()->user();
 
-        return view('payment',compact('id'));
+        return view('payment',compact('id','course'),);
     } 
     public function store(Request $request,$id)
 {
