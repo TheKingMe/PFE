@@ -13,6 +13,8 @@ use App\Http\Controllers\coursepagecontroller;
 use App\Models\section;
 use Illuminate\Http\Request;
 use App\Http\Controllers\testController;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\quizcontroller;
 use App\Http\Controllers\paymentController;
@@ -77,18 +79,24 @@ Route::post('/register', [UserController::class, 'store'])->name('register.store
 
 Route::get('/courses', [CourseController::class, 'index'])->name('Courses.index');
 //Route::get('/courses/{id}',[coursepagecontroller::class, 'index'])->name('courseId.index');
-    
 Route::get('/courses/{id}', function ($id) {
     if(!Auth::check())
     {
-     return redirect()->back()->with('erreur','dont touche me again');
+        return redirect()->back()->withErrors(['erreur' => 'You need to <a href="'.route("login").'"> login </a> before seeing the course']);
     }
-    $course = Course::findOrFail($id);
-    $sections = Section::all();
-    $contents = SectionContents::all();
+    try {
 
+    $course = Course::findOrFail($id);
+    $sections = Section::orderBy('order')->get();
+    $contents = SectionContents::all();
     return view('course', compact('course', 'sections', 'contents'));
+
+    } catch (ModelNotFoundException $e) {
+            return response()->view('errors.course-not-found', [], 404);
+
+}
 })->name('courses.show');
+
 
 Route::get('/adminstration',[admincontroller::class,'index'])->name('adminstration');
 
@@ -144,4 +152,5 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // Route::get('/email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
-
+//Route Index la page de chaeck test
+Route::get('/courses/{id}/checktest',[testController::class,'checktest'])->name('checktest');

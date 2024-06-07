@@ -2,109 +2,7 @@
 @section('title','accueil')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-<style>
-  body {
-  background: #1D1E22;
-}
-.section-container {
-  max-width: 100%;
-  margin: auto;
-  padding: 20px;
-  display: flex;
-  align-items: center; /* Align the scroll icon vertically */
-}
-
-.product-list {
-  display: flex;
-  flex-direction: row;
-}
-
-.product-card {
-  position: relative;
-  flex: 0 0 auto;
-  width: 30%;
-  margin: 20px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-      background: #fff;
-}
-
-.new-badge {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  background-color: #FF5733;
-  color: white;
-  padding: 5px;
-  border-radius: 3px;
-  font-size: 0.8em;
-}
-
-
-
-/* Style scrollbar for Chrome, Safari, and Opera */
-.product-list-container::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-.product-list-container::-webkit-scrollbar-thumb {
-  background: #333;
-}
-
-.product-list-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.product-list-container::-webkit-scrollbar-track {
-  background: #ccc;
-}
-
-.scroll-icon {
-  font-size: 2em;
-  cursor: pointer;
-  margin-left: 20px; /* Spacing between the container and the arrow */
-}
-
-
-.product-card img {
-  width: 100%;
-  height: auto;
-}
-
-.product-card h3 {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.product-card p {
-  font-size: 14px;
-  display: -webkit-box; /* Required for -webkit-line-clamp */
-  -webkit-line-clamp: 2; /* Limit the description to 2 lines */
-  -webkit-box-orient: vertical; /* Ensure text is vertically oriented */
-  overflow:hidden ; /* Hide any overflowing text */
-  text-overflow: ellipsis; /* Add an ellipsis (...) for truncated text */
-}
-
-#scrollLeft ,#scrollRight{
-      font-size: 2em;
-      cursor: pointer;
-      margin-right: 20px; /* Spacing between the container and the arrow */
-      color: black;
-    }
-
-    #scrollLeft:hover, #scrollRight:hover {
-      color: royalblue;
-    }
-
-@media screen and (max-width: 600px) {
-  .product-card {
-    width: 100%;
-    margin: 10px;
-  }
-}
-</style>
+<link rel="stylesheet" href="{{asset('css/accueil.css')}}">
 <script>
   $(function() {
   var print = function(msg) {
@@ -174,111 +72,7 @@
   });
 });
 
-</script><style>
-   #outer {
-   float: left;
-   width: 250px;
-   overflow: hidden;
-   white-space: nowrap;
-   display: inline-block;
- }
- 
- #left-button {
-   float: left;
-   width: 30px;
-   text-align: center;
- }
- 
- #right-button {
-   float: left;
-   width: 30px;
-   text-align: center;
- }
- 
- a {
-   text-decoration: none;
-   font-weight: bolder;
-   color: red;
- }
- 
- #inner:first-child {
-   margin-left: 0;
- }
- 
- label {
-   margin-left: 10px;
- }
- 
- .hide {
-   display: none;
- }
-
-
-
-
-
-  .product-list-container {
-    position: relative;
-    overflow-x: auto;
-    white-space: nowrap;
-    scrollbar-width: none;
-    scrollbar-color: #333 #ccc;
-    flex: 1; /* Take up remaining horizontal space */
-  }
-  .product-card:hover{
-    background-color: powderblue;
-  }
-
-  .product-list {
-    display: flex;
-    flex-direction: row;
-  }
-
-
-
-  .new-badge {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    background-color: #FF5733;
-    color: white;
-    padding: 5px;
-    border-radius: 3px;
-    font-size: 0.8em;
-  }
-
-  
- 
-
-
-
-  #scrollLeft {
-    left: 0; /* Position to the left */
-  }
-
-  #scrollRight {
-    right: 0; /* Position to the right */
-  }
-
-  /* Scrollbar styles */
-  .product-list-container::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-
-  .product-list-container::-webkit-scrollbar-thumb {
-    background: #333;
-  }
-
-  .product-list-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-
-  .product-list-container::-webkit-scrollbar-track {
-    background: #ccc;
-  }
-</style>
-
+</script>
 
 @section('content')
   
@@ -298,11 +92,13 @@
 <div style="width: 50%">
     <h1 class="mb-5">Learn without limits</h1>
     <h5 class="mb-5" style="font-size: 20px">Start, switch, or advance your career with more than 10,000 courses, Professional Certificates, and degrees from world-class universities and companies.</h5>
+    @if(!(Auth::user()))
     <button  type="button" class="btn btn-primary btn-lg mr-4" ><a class="dropdown-item" href="{{route('registre.create')}}">Join Us for Free</a></button>
     <button  type="button" class="btn btn-secondary btn-lg mr-4"><a class="dropdown-item" href="{{route('login')}}">Login</a></button>
-</div>
+  @endif
+  </div>
 <div style="width:50%">
-    <img src="images/bg-img.jpg" style="margin-left:30%; height:70%;" class="img-thumbnail" alt="...">
+    <img src="images/bg-img.jpg" style="margin-left:20%; height:80%;" class="img-thumbnail" alt="...">
 </div>
 
 </section>
@@ -389,92 +185,7 @@
   <i class="fas fa-arrow-right"></i>
 </div>
     
-     {{-- <div class="slider-wrapper" id="">
-        <div class="slider">
-          <div class="col-md-12 heroSlider-fixed">
-            <div class="overlay">
-                <button class="scroll-btn prev">&#10094;</button>
 
-        <ul class="cards">
-          <li class="card">
-            <div class="col">
-                <div class="card h-100">
-                  <img src="images/bg-img.jpg" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  </div>
-                  <div class="card-footer">
-                    <small class="text-body-secondary">Last updated 3 mins ago</small>
-                  </div>
-                </div>
-              </div>
-          </li>
-          <li class="card">
-            <div class="col">
-                <div class="card h-100">
-                  <img src="images/bg-img.jpg" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  </div>
-                  <div class="card-footer">
-                    <small class="text-body-secondary">Last updated 3 mins ago</small>
-                  </div>
-                </div>
-              </div>
-          </li>
-          <li class="card">
-            <div class="col">
-                <div class="card h-100">
-                  <img src="images/bg-img.jpg" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  </div>
-                  <div class="card-footer">
-                    <small class="text-body-secondary">Last updated 3 mins ago</small>
-                  </div>
-                </div>
-              </div>
-          </li>
-          <li class="card">
-            <div class="col">
-                <div class="card h-100">
-                  <img src="images/bg-img.jpg" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  </div>
-                  <div class="card-footer">
-                    <small class="text-body-secondary">Last updated 3 mins ago</small>
-                  </div>
-                </div>
-              </div>
-          </li>
-          <li class="card">
-            <div class="col">
-                <div class="card h-100">
-                  <img src="images/bg-img.jpg" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  </div>
-                  <div class="card-footer">
-                    <small class="text-body-secondary">Last updated 3 mins ago</small>
-                  </div>
-                </div>
-              </div>
-          </li>
-          
-         
-        </ul>
-        <button class="scroll-btn prev">&#10095;</button>
-</div>
-    </div>
-</div>
-</div>
-  --}}
   </section>
   
 

@@ -533,7 +533,7 @@ body {
             </li> --}}
             <li class="flex-between">
               <span>course</span>
-              <strong>course_name</strong>
+              <strong>{{$course->name}}</strong>
             </li>
             {{-- <li class="flex-between">
               <span>VAT</span>
@@ -546,7 +546,7 @@ body {
           <div class="flex-fill flex-vertical">
             <div class="total-label f-secondary-color">You have to Pay</div>
             <div>
-              <strong  >549.99</strong>
+              <strong  >{{$course->price}}</strong>
               <input type="hidden" name="amount" value="100">
               {{-- <small>.99 <span class="f-secondary-color">USD</span></small> --}}
             </div>

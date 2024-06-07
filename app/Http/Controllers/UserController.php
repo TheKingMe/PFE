@@ -59,13 +59,16 @@ $FormField = $request->validate([
 ]);
 if(auth()->attempt($FormField)){
     $request->session()->regenerate();
+    if(Auth::user()->role == 'B-admin'){
+        return redirect()->route('AdminList')->with('succes','welcome Admin');
+    }
     if(Auth::user()->role == 'admin'){
         return redirect()->route('adminstration')->with('succes','welcome admin');
     }
     return redirect()->route('welcome')->with('message','you are logged in');
 
 }
-return back();
+return back()->with('erreur',"Email or password is incorrect");
 }
 public function logout(Request $Request){
 auth()->logout();

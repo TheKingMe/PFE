@@ -27,7 +27,7 @@ class CourseController extends Controller
     }
      public function index()
         {
-            $courses = Course::paginate(3); 
+            $courses = Course::orderBy('created_at', 'desc')->paginate(10); 
             return view('courses')->with('courses', $courses);  
     } 
 
@@ -45,14 +45,13 @@ class CourseController extends Controller
         
         $teacherId = auth()->id();
         $data = request()->validate([
-            'name' => ['required', 'min:3'],
+            'name' => ['required', 'min:3','max:16'],
             'description' => ['required', 'min:5'],
             // 'teacher' => ['required', 'exists:users,id'],
-            // 'rating' => ['required', 'numeric', 'min:1', 'max:5'], // Assuming rating is a numeric value between 1 and 5
+            // 'rating' => ['required', 'numeric', 'min:1', 'max:5'],
            'image'=>['nullable','image','mimes:jpeg,png,jpg,gif','max:2048'],
-            'tags' => ['string', 'max:255'], // Assuming each tag is a string with a maximum length of 255 characters
+            'tags' => ['string', 'max:255'], 
             
-            //hadak knt daro ch7al h
         ]);
      
         // Assuming you want to store this data in a database, you can do something like this:
@@ -77,17 +76,15 @@ class CourseController extends Controller
 
                
               // $file = new CourseContent();
-              // $file->file_path = $url; // Store the file URL in the database
-               //$course->file()->save($file); // Assuming 'file' is the relationship method in the Course model
+              // $file->file_path = $url; 
+               //$course->file()->save($file); 
                
                return redirect()->route('Add.create', ['course_id' => $course->id]);
-        // Assuming you have a pivot table to handle many-to-many relationship between courses and tags
         // if(isset($data['tags'])){
-        //     $tags = Tag::whereIn('name', $data['tags'])->pluck('id'); // Assuming 'Tag' is your model for tags
+        //     $tags = Tag::whereIn('name', $data['tags'])->pluck('id');
         //     $course->tags()->sync($tags);
         // }
     
-        // Optionally, you might want to redirect the user after storing the data
        
     }
     
@@ -121,10 +118,8 @@ class CourseController extends Controller
         //     return redirect()->route('courses.show',['id'=>$courseId])->with('error', 'You are already enrolled in this course.');
         // }
     
-        // Enroll the user in the course
         // $user->courses()->attach($courseId);
     
-        // Redirect the user back to the course page or any other appropriate page
         return redirect()->route('payment.index', ['id' => $id]);
 
     }
@@ -144,15 +139,11 @@ class CourseController extends Controller
         
     public function tag($tag)
     {
-    // Retrieve courses that have the specified tag
     $courses = Course::where('tags', 'like', "%$tag%")->get();
     
-    // Pass the courses to the view
     return view('courses.tag', compact('courses'));
 }
-//ach tadir daba chno baghi tgad waaa ka3ka3aaaaaaaaaaaaaaaaaah
 
-//mzl matzad liygol liya skat
 
 }
     

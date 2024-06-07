@@ -7,7 +7,7 @@ use App\Models\Course;
 class admincontroller extends Controller
 {
     public function index(){
-        $courses = Course::all();
+        $courses = Course::paginate(6);
         
         return view('adminstration',compact('courses'));
     }

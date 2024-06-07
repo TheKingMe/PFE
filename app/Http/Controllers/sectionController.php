@@ -34,7 +34,7 @@ class SectionController extends Controller
               
          
             return view('add')->with('sections', $sections)->with('course_id', $course_id)->with('sectionContents', $sectioncontents);
-        }
+            }
 
         // public function store(Request $request){
         //     // Validate the incoming request data

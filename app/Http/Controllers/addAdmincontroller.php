@@ -52,7 +52,7 @@ class addAdmincontroller extends Controller
 
 public function show()
 {
-    $users = User::all();
+    $users = User::where('role', 'admin')->paginate(7); // Display 10 admins per page
     return view('AdminList',compact('users') );
 }
 public function delete($id)

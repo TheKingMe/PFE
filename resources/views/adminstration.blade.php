@@ -31,10 +31,12 @@ background: radial-gradient(circle, rgba(238,174,202,1) 42%, rgba(148,187,233,1)
 <div class="course-rectangle">
 <a href="/courses/{{$course->id}}"><h2>{{$course->name}}</h2></a>
 <h4>{{$course->teacher}}</h4>
-<p>{{$course->description}}</p>
+{{ \Illuminate\Support\Str::words($course->description, 7, '...') }}
 </div>
 @endif
 @endforeach
-
-</d>
+<div  class="d-flex justify-content-center">
+    {{ $courses->links('vendor.pagination.bootstrap-4') }}
+  </div>
+</div>
 @endsection

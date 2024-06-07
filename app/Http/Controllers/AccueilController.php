@@ -9,7 +9,7 @@ class AccueilController extends Controller
 {
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::orderBy('updated_at', 'desc')->get();
         foreach ($courses as $course) {
             // Assuming $course->updated_at is the timestamp of the last update
             $lastUpdate = Carbon::parse($course->updated_at);

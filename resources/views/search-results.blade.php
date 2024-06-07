@@ -11,7 +11,7 @@
         <div class="card-list">
             @if ($courses->count() > 0)
                 @foreach ($courses as $course)
-                    @if ($course->approved == 0)
+                    @if ($course->approved == 1)
                         @php
                             $tags = explode(',', $course->tags);
                         @endphp
@@ -29,13 +29,7 @@
                                 @endfor
                             </div>
                             <h3>{{ $course->description }}</h3>
-                            @if (Auth::check() && $course->teacher != Auth::user()->name)
-                                <form action="{{ route('courses.enroll') }}" method="POST">
-                                    @csrf <!-- CSRF protection -->  
-                                    <input type="hidden" name="course_id" value="{{ $course->id }}">
-                                    <button type="submit" class="btn btn-primary">Enroll</button>
-                                </form>
-                            @endif
+                            
                             <div class="arrow"> 
                                 <i class="fas fa-arrow-right card-icon"></i>
                             </div>

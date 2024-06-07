@@ -6,91 +6,8 @@
   
 
 @section('content')
-<style>
-  .accordion {
-  width: 100%;
-}
 
-.accordion-item {
-  border: 1px solid #fff;
-  margin-bottom: 10px;
-}
-.accordionitem {
-  margin-bottom: 10px;
-}
-
-.accordion-title {
-  background-color: #fff;
-  padding: 10px;
-  cursor: pointer;
-}
-.accordiontitle {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.accordion-content {
-  display: none;
-  padding: 10px;
-}
-
-.accordion-item.active .accordion-title {
-  background-color: #fff;
-  color: royalblue;
-}
-.accordionitem.active .accordiontitle {
-  color: black;
-}
-
-/* ... Existing styles ... */
-
-.arrow {
-  border: solid rgb(0, 0, 0);
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
-}
-.right {
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-}
- .accordion-item.active .arrow {
-  transform: rotate(45deg);
-} 
- 
- .accordionitem.active .arrow {
-  transform: rotate(45deg);
-}
-
-
-
-
-#videoContainer {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-z-index: 9999; /* Adjust this if necessary to make the video appear above other content */
-}
-
-#videoPlayer {
-width: 800px; /* Adjust width as desired */
-height: 500px; /* Adjust height as desired */
-}
-#pdfoContainer {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-z-index: 9999; /* Adjust this if necessary to make the video appear above other content */
-}
-
-#pdfPlayer {
-width: 800px; /* Adjust width as desired */
-height: 500px; /* Adjust height as desired */
-}
-
-</style>
+<link rel="stylesheet" href="{{asset('css/course.css')}}">
 <!-- Include Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -110,21 +27,29 @@ height: 500px; /* Adjust height as desired */
 </div> 
 
 @endif
+<div style="display: flex;padding:20px; width:100%;justify-content: center " >
 
+@if(Auth::check() && (Auth::user()->role == 'admin' || Auth::user()->role == 'B-admin') && $course->approved == false )
+<button type="button"  data-toggle="modal" style="margin-right: 20px;" class="btn btn-primary" data-target="#approveModal">
+    APPROVE
+</button>
 
-@if(Auth::check() && Auth::user()->role == 'admin' && $course->approved == false)
-<div style="display: flex;padding:20px;" >
-    <form method="POST" action="{{ route('course.delete', $course->id) }}" >
+@endif
+@if((Auth::user()->role=='student'|| Auth::user()->role=='teacher'))
+</div>
+
+@endif
+@if(Auth::check() && (Auth::user()->role == 'admin' || Auth::user()->role == 'B-admin'))
+   
+  <form method="POST" action="{{ route('course.delete', $course->id) }}" >
         @csrf
         @method('DELETE')
-        <button type="submit"  class="btn btn-primary" style="margin-right: 20px; " >DELETE</button>
+        <button type="submit" style="background: darkred;"  class="btn btn-primary"  >DELETE</button>
     </form>
-
-    <!-- Approve Button triggers modal -->
-    <button type="button"  data-toggle="modal" class="btn btn-primary" data-target="#approveModal">
-        APPROVE
-    </button>
-</div>
+    <a href="/courses/{{$course['id']}}/checktest" class="btn btn-primary" style="margin-left:15px;" >check the test</a>
+    
+   
+  </div>
     <!-- Approve Modal -->
     <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -152,16 +77,7 @@ height: 500px; /* Adjust height as desired */
         </div>
     </div>
 @endif
-<style>
-  .Start-description{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    padding: 5%;
-    background-color:lightslategrey;
-  }
-</style>
+
 <div style="display:flex;  background-color:lightslategrey;align-items: center ;justify-content: space-between;"  >
   <div class="Start-description">
 <h1>
@@ -169,24 +85,26 @@ height: 500px; /* Adjust height as desired */
 </h1>
 <p>{{$course['description']}}</p>
 <p> created by : {{$course['teacher']}} </p>
-@if(Auth::check() && Auth::user()->name!=$course->teacher)
-<form action="{{ route('courses.enroll',['id'=>$course->id])}}" method="POST">
-          @csrf <!-- CSRF protection -->  
+@if(Auth::check() && (Auth::user()->name!=$course->teacher && Auth::user()->role != 'B-admin' && Auth::user()->role != 'admin' && !(auth::user()->isenrolled($course->id))))
+<form action="{{ route('courses.enroll',['id'=>$course->id])}}" method="POST"> 
+          @csrf <!-- CSRF protection --> 
+
           <input type="hidden" name="course_id" value="{{ $course->id }}">
+        
           <button type="submit" class="btn btn-primary">Enroll</button>
 </form>
 @endif 
 </div>
 @if ($course->image)
-<img style="margin:40px;border-radius: 15px;box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);width: 35%;height:20%;" src="{{ asset('storage/' . $course->image) }}" alt="">
+<img style="margin:40px;border-radius: 15px;box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);width: 500px;height:250px;" src="{{ asset('storage/' . $course->image) }}" alt="">
 
 @else
-<img style="margin:40px;border-radius: 15px;box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);width: 35%;height:20%;" src="{{asset('images/bg-img.jpg')}}" alt="">
+<img style="margin:40px;border-radius: 15px;box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);width: 690px;height:350px;" src="{{asset('images/bg-img.jpg')}}" alt="">
 @endif
 </div>
 
 <div style="display:flex;flex-direction: column;justify-content: center;padding-left:10%;padding-bottom:30px;;background-color: #e8e4e4" >
-<h2 style="margin-top: 20px " >Course Content </h2>
+<h2 style="margin-top: 20px " >Course Content</h2>
 @foreach ($sections as $section)
     @if($section->course_id == $course->id)
     <div class="accordion" style="width: 40%;background-color: #c6c6c6; " >
@@ -200,13 +118,12 @@ height: 500px; /* Adjust height as desired */
            <div class="accordion-content">{{$section->description}}
             @foreach ($contents as $content)
           
-            @if ($content->section_id == $section->id)
 
 
 
           @if ($content->section_id == $section->id)
           <br> 
-          <?php
+  <?php
            $videoId = 'video_' . $content->id; // Unique ID for each video
                 $pdfId = 'pdf_' . $content->id;
         
@@ -221,9 +138,9 @@ $f_p = $files[0];
 }
 ?>
 @if ($content->file_type === 'mp4')
-    <a href="#" id="{{ $videoId }}" onclick="showVideo('{{ $videoId }}');" class="video-link">{{ $content->file_name }}</a><br>
+    <a  id="{{ $videoId }}" onclick="showVideo('{{ $videoId }}');" style="cursor: pointer;" class="video-link">{{ $content->file_name }}</a><br>
 @elseif ($content->file_type === 'pdf')
-    <a href="#" id="{{ $pdfId }}" onclick="showPDF('{{ $pdfId }}');" class="pdf-link">{{ $content->file_name }}</a><br>
+    <a  id="{{ $pdfId }}" onclick="showPDF('{{ $pdfId }}');" style="cursor: pointer;" class="pdf-link">{{ $content->file_name }}</a><br>
 @endif
 
   
@@ -234,15 +151,15 @@ $f_p = $files[0];
 </div> 
 
 <>--}}
-  <div id="videoContainer_{{ $content->id }}" class="videoContainer" style="display: none;">
-      <video id="videoPlayer_{{ $content->id }}" width="500" height="500" controls >
+  <div id="videoContainer_{{ $content->id }}" style="" class="videoContainer" style="display: none;">
+      <video id="videoPlayer_{{ $content->id }}" style="position: fixed; width: 80%; height: 60%; top: 50%; left: 50%; transform: translate(-50%, -50%);" width="500" height="500" controls >
           <source src="{{ asset($f_p) }}" type="video/mp4">
       </video>
   </div>
   
   <div id="pdfContainer_{{ $content->id }}" class="pdfContainer" style="display: none;">
     <!-- Embed PDF viewer here -->
-    <object data="{{ asset($f_p) }}" type="application/pdf" width="800" height="500">
+    <object data="{{ asset($f_p) }}" style="position: fixed; width: 60%; height: 90%; top: 50%; left: 50%; transform: translate(-50%, -50%);" type="application/pdf" width="800" height="500">
         <p>Alternative content for users without PDF plugin</p>
     </object>
 </div>
@@ -252,14 +169,25 @@ $f_p = $files[0];
            @endif
 
 
-            @endif
+            
            @endforeach
-        </div>
-      
+           @if (auth::user()->role =='admin'|| auth::user()->role =='B-admin' || auth::user()->name == $course->teacher )
+          
+           @else
+           @if(!(auth::user()->isenrolled($course->id)))
+           <br>
+           <span style="color: rgb(140, 0, 255)" > Enroll For all Sections.</span>
+  
+           @break
+           @endif
+           @endif
+
+        
+          </div>
 
         </div>
-        
-    </div>
+      </div>
+    
     @endif
 
 
@@ -271,6 +199,7 @@ $f_p = $files[0];
 @if(Auth::check() && Auth::user()->name==$course->teacher)
 <a href="/courses/add/{{$course['id']}}" class="btn btn-primary" style="width: 15%;margin:10px;" role="button">update course</a>
 @endif
+
 </div>
 
 
@@ -309,12 +238,17 @@ function showVideo(videoId) {
         videoContainer.style.display = 'none';
     }
 }
-
 window.addEventListener('click', function(event) {
     var videoContainers = document.querySelectorAll('[id^="videoContainer_"]');
     var videoLinks = document.querySelectorAll('[id^="video_"]');
+    var isContentAdded = function() {
+        // Add your logic to determine if content is added or not
+        return false;
+    };
+    
     videoContainers.forEach(function(videoContainer) {
-        if (event.target !== videoContainer && !Array.from(videoLinks).includes(event.target)) {
+        // Check if the click is outside the video container
+        if (!videoContainer.contains(event.target) && !Array.from(videoLinks).includes(event.target)) {
             var videoPlayerId = 'videoPlayer_' + videoContainer.id.split('_')[1];
             var videoPlayer = document.getElementById(videoPlayerId);
             // Check if the video player exists and if it's already playing
@@ -325,6 +259,7 @@ window.addEventListener('click', function(event) {
         }
     });
 });
+
 
 function isContentAdded() {
 
@@ -353,6 +288,7 @@ window.addEventListener('click', function(event) {
         }
     });
 });
+
 
             </script>
 

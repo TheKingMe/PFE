@@ -2,62 +2,24 @@
 @section('title','registre')
 
 @section('content')
-<style>
-.select-wrapper {
-  position: relative;
-  display: inline-block;
-}
+<link rel="stylesheet" href="{{asset('css/registre.css')}}">
 
-.select-wrapper select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  padding: 8px 30px 8px 10px;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #333333;
-  cursor: pointer;
-  width: 200px;
-  outline: none;
-}
 
-.select-wrapper select::-ms-expand {
-  display: none;
-}
-
-.select-wrapper::after {
-  content: '\25BC';
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* Style the dropdown options */
-.select-wrapper select option {
-  background-color: #ffffff;
-  color: #333333;
-}
-</style>
-
-<section class="container-login" >
-   <div class="login_form" >
+<section class="container-login" style="height:auto;padding :20px" >
+   <div class="login_form" style="height:auto;" >
     
-      <form method="POST" action="{{ route('register.store') }}">
+      <form method="POST" style="display: flex;flex-direction:column;" action="{{ route('register.store') }}">
         @csrf <!-- CSRF protection -->
         <div class="mb-3">
             <label for="exampleInputName" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="exampleInputName" name="name" aria-describedby="nameHelp">
+            <input type="text" class="form-control" id="exampleInputName" name="name" aria-describedby="nameHelp" required>
             @error('name')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
           </div>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp">
+            <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" required>
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
             @error('email')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -65,33 +27,35 @@
         </div>
         <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
             @error('password')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
           </div>
         <div class="mb-3">
             <label for="exampleInputPassword2" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword2" name="password_confirmation">
+            <input type="password" class="form-control" id="exampleInputPassword2" name="password_confirmation" required>
             @error('password_confirmation')
             <div class="alert alert-danger">{{ $message }}</div>
         @enderror
           </div>
 
           <div class="select-wrapper mb-3">
-            <select id="mySelect" name='role'>
+            <select id="mySelect" name='role' required>
               <option selected disabled>Role</option>
               <option value="teacher">Teacher</option>
               <option value="student">Student</option> 
             </select>
-            @error('role')
-            <div class="alert alert-dangerr">{{ $message }}</div>
-        @enderror
+          
           </div>
+          @error('role')
+          <div class="alert alert-danger">{{ $message }}</div>
+      @enderror
           
       
         <button type="submit" class="btn btn-primary">Submit</button>
-    </form>    
+          <a href="login"> already have account? </a>
+      </form>    
 </div>
 </section>
 @endsection

@@ -22,7 +22,11 @@ class TestController extends Controller
 
         return view('test', ['course' => $course, 'quizzes' => $quiz]);
     }
-
+public function checktest($courseid){
+$course = course:: findOrFail($courseid);
+$quiz = quiz::with('questions.options')->get();
+return view('testcheck',['course'=>$course,'quizzes'=>$quiz]);
+}
     public function submitTest(Request $request)
     {
         $data = $request->validate([

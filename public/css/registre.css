@@ -1,0 +1,124 @@
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 8px 30px 8px 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333333;
+    cursor: pointer;
+    width: 200px;
+    outline: none;
+  }
+  
+  .select-wrapper select::-ms-expand {
+    display: none;
+  }
+  
+  .select-wrapper::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  /* Style the dropdown options */
+  .select-wrapper select option {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  .select-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 8px 30px 8px 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333333;
+    cursor: pointer;
+    width: 100%;
+    outline: none;
+  }
+  
+  .select-wrapper select::-ms-expand {
+    display: none;
+  }
+  
+  .select-wrapper::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  .select-wrapper select option {
+    background-color: #ffffff;
+    color: #333333;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .alert {
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+    min-height: 1.5rem; /* Reserve space for error messages */
+  }
+  
+  .container-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .login_form {
+    width: 100%;
+    max-width: 500px;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  
+  
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  
+  
+  

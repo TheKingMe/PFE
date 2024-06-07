@@ -674,15 +674,7 @@ button[type="submit"]:hover {
   width: 800px; /* Adjust width as desired */
   height: 500px; /* Adjust height as desired */
 }
-
-
-
-
-
-
-       
-      
-        
+   
 </style>
 <body>
 <section class="container" style="height:100%">
@@ -702,11 +694,11 @@ button[type="submit"]:hover {
      
     </div>
   </div> 
-  <form id="changeOrderForm" method="POST" action="{{ route('change_order_range', ['course_id' => $course_id]) }}" enctype="multipart/form-data" novalidate>
+  <form id="changeOrderForm" method="POST" action="{{ route('change_order_range', ['course_id' => $course_id]) }}" enctype="multipart/form-data" >
     @csrf
     <label for="startOrder">section order:</label>
     <input type="number" id="startOrder" min="1" name="startOrder" required>
-    <label for="endOrder">section order</label>
+    <label for="endOrder">section order:</label>
     <input type="number" id="endOrder" min="1" name="endOrder" required>
     <button type="submit" style="color:black;" >Change Order</button>
 </form>
@@ -716,16 +708,7 @@ button[type="submit"]:hover {
     </div>
 @endif
 
-<!-- Display validation errors -->
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+
 
 <div id="myModal" class="modall">
     <form method="POST" action="{{route('Add.store')}}" style="display: flex;flex-direction: column;" enctype="multipart/form-data" >
@@ -755,6 +738,12 @@ button[type="submit"]:hover {
     return true;
   }
   </script>
+@error('name')
+<div class="text-danger">{{ $message }}</div>
+@enderror
+@error('description')
+<div class="text-danger">{{ $message }}</div>
+@enderror
 @error('file_path')
 <div class="text-danger">{{ $message }}</div>
 @enderror
@@ -1031,8 +1020,14 @@ function showPDF(pdfId) {
 window.addEventListener('click', function(event) {
     var videoContainers = document.querySelectorAll('[id^="videoContainer_"]');
     var videoLinks = document.querySelectorAll('[id^="video_"]');
+    var isContentAdded = function() {
+        // Add your logic to determine if content is added or not
+        return false;
+    };
+    
     videoContainers.forEach(function(videoContainer) {
-        if (event.target !== videoContainer && !Array.from(videoLinks).includes(event.target)) {
+        // Check if the click is outside the video container
+        if (!videoContainer.contains(event.target) && !Array.from(videoLinks).includes(event.target)) {
             var videoPlayerId = 'videoPlayer_' + videoContainer.id.split('_')[1];
             var videoPlayer = document.getElementById(videoPlayerId);
             // Check if the video player exists and if it's already playing
@@ -1043,6 +1038,7 @@ window.addEventListener('click', function(event) {
         }
     });
 });
+
 
 window.addEventListener('click', function(event) {
     var pdfContainers = document.querySelectorAll('[id^="pdfContainer_"]');

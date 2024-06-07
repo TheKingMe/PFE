@@ -9,8 +9,13 @@
     {{ session('erreur') }}
 </div>
 @endif 
+@if ($errors->has('erreur'))
+    <div class="alert alert-danger">
+        {!! $errors->first('erreur') !!}
+    </div>
+@endif
   <h2 class="container-heading">All Courses</h2>
-  @if(Auth::check() && Auth::user()->role == 'teacher')
+  @if(Auth::check() &&( Auth::user()->role == 'teacher'|| Auth::user()->role == 'B-admin') )
 <button id="openModalButton" type="button" class="btn btn-primary">Add Course</button>
 @endif
 <!-- Modal -->
@@ -67,7 +72,7 @@
                     $tags=explode(',', $course->tags);
                     @endphp
             
-            <a href="{{route('courses.show',['id'=>$course->id])}}" class="card-item">
+            <a href="{{route('courses.show',['id'=>$course->id])}}" style=" " class="card-item">
            
            
             @if($course->image)
@@ -76,7 +81,7 @@
                 <img src="images/bg-img.jpg" alt="Card Image">
 @endif
                 <h2>{{$course->name}}</h2>
-                <h4>{{$course->teacher}}</h4>
+                <div> <h6> Created by:</h6> <h4> {{$course->teacher}}</h4></div>
                 @foreach ($tags as $tag)
               <span class="developer">{{ $tag }}</span>
                 @endforeach
@@ -86,7 +91,7 @@
                     @endfor
                     
                 </div>
-                <h3>{{ $course->description }}</h3>
+                <h3>{{ \Illuminate\Support\Str::words($course->description, 3, '...') }}</h3>
                 @if (Auth::check() && $course->teacher !=  Auth::user()->name )
       
          @endif

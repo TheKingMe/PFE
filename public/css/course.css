@@ -1,0 +1,91 @@
+
+.accordion {
+    width: 100%;
+  }
+  
+  .accordion-item {
+    border: 1px solid #fff;
+    margin-bottom: 10px;
+  }
+  .accordionitem {
+    margin-bottom: 10px;
+  }
+  
+  .accordion-title {
+    background-color: #fff;
+    padding: 10px;
+    cursor: pointer;
+  }
+  .accordiontitle {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .accordion-content {
+    display: none;
+    padding: 10px;
+  }
+  
+  .accordion-item.active .accordion-title {
+    background-color: #fff;
+    color: royalblue;
+  }
+  .accordionitem.active .accordiontitle {
+    color: black;
+  }
+  
+  /* ... Existing styles ... */
+  
+  .arrow {
+    border: solid rgb(0, 0, 0);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+  }
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
+   .accordion-item.active .arrow {
+    transform: rotate(45deg);
+  } 
+   
+   .accordionitem.active .arrow {
+    transform: rotate(45deg);
+  }
+  
+  
+  
+  
+  #videoContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Adjust this if necessary to make the video appear above other content */
+  }
+  
+  #videoPlayer {
+  width: 800px; /* Adjust width as desired */
+  height: 500px; /* Adjust height as desired */
+  }
+  #pdfoContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Adjust this if necessary to make the video appear above other content */
+  }
+  
+  #pdfPlayer {
+  width: 800px; /* Adjust width as desired */
+  height: 500px; /* Adjust height as desired */
+  }
+  .Start-description{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 5%;
+    background-color:lightslategrey;
+  }
